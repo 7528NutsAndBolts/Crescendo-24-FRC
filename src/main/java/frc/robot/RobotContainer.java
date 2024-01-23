@@ -24,7 +24,7 @@ import frc.robot.commands.LEDs.SetCubeMode;
 import frc.robot.commands.Wrist.DownWrist;
 import frc.robot.commands.Wrist.JoystickWrist;
 import frc.robot.subsystems.*;
-import frc.robot.auto.AutonomousSelector;
+// import frc.robot.auto.AutonomousSelector;
 // import frc.auto.AutonomousSelector;
 // import frc.robot.auto.DefaultAuto;
 
@@ -36,7 +36,7 @@ import frc.robot.auto.AutonomousSelector;
  */
 public class RobotContainer {
     /* Autonomous Selector */
-    private final AutonomousSelector autonomousSelector = new AutonomousSelector();
+    // private final AutonomousSelector autonomousSelector = new AutonomousSelector();
     
     /* Controllers */
     private final Joystick driver = new Joystick(1);
