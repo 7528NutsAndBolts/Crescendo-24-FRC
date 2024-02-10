@@ -37,9 +37,21 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /*Climb Op. Controls */
+<<<<<<< HEAD
     // private final int leftClimber = XboxController.Axis.kLeftY.value;
     // private final int rightClimber = XboxController.Axis.kRightY.value;
     //TODO get tom to help with climber analog shit
+=======
+<<<<<<< HEAD
+    // private final int leftClimber = XboxController.Axis.kLeftY.value;
+    // private final int rightClimber = XboxController.Axis.kRightY.value;
+    //TODO get tom to help with climber analog shit
+=======
+    private final int LeftClimbUp = XboxController.Axis.kLeftY.value;
+    private final int RightClimbUp = XboxController.Axis.kRightY.value;
+
+>>>>>>> cecaa8191244576a62f4d40be71cdc6dea2a2b9b
+>>>>>>> e3ef82fd7af63224c03cd1d44538532924ae397c
     /* Setting Bot to Field Centric */
     private final Boolean robotCentric = false;
 
@@ -79,6 +91,10 @@ public class RobotContainer {
             )
         );
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e3ef82fd7af63224c03cd1d44538532924ae397c
         // climb.setDefaultCommand(new JoystickClimb());
         // climb.setDefaultCommand(
         //     new ClimbSticks( 
@@ -89,6 +105,14 @@ public class RobotContainer {
         // );
 
    
+<<<<<<< HEAD
+=======
+=======
+    
+        elevator.setDefaultCommand(new JoystickElevator());
+        wrist.setDefaultCommand(new JoystickWrist());
+>>>>>>> cecaa8191244576a62f4d40be71cdc6dea2a2b9b
+>>>>>>> e3ef82fd7af63224c03cd1d44538532924ae397c
 
         /* Configure the button bindings */
         configureButtonBindings();
