@@ -16,9 +16,9 @@ public class TeleopSwerve extends Command {
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private Boolean robotCentricSup;
-    private double slowSpeed = 0.2;
-    private double midSpeed = 0.5;
-    private double elevatorHeight = 0;
+    // private double slowSpeed = 0.2;
+    // private double midSpeed = 0.75; //originally 0.5
+    // private double elevatorHeight = 0;
 
     public TeleopSwerve(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, boolean robotCentric) {
         this.s_Swerve = s_Swerve;
@@ -38,19 +38,19 @@ public class TeleopSwerve extends Command {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
-        if (elevatorHeight >= 30000) {
-            translationVal = translationVal * slowSpeed;
-            strafeVal = strafeVal * slowSpeed;
-            rotationVal = rotationVal * slowSpeed;
-        }
+        // if (elevatorHeight >= 30000) {
+        //     translationVal = translationVal * slowSpeed;
+        //     strafeVal = strafeVal * slowSpeed;
+        //     rotationVal = rotationVal * slowSpeed;
+        // }
 
-        else if (elevatorHeight > 5000 && elevatorHeight < 29999) {
-            translationVal = translationVal * midSpeed;
-            strafeVal = strafeVal * midSpeed;
-            rotationVal = rotationVal * midSpeed;
-        }
+        // else if (elevatorHeight > 5000 && elevatorHeight < 29999) {
+        //     translationVal = translationVal * midSpeed;
+        //     strafeVal = strafeVal * midSpeed;
+        //     rotationVal = rotationVal * midSpeed;
+        // }
 
-        else {}
+        // else {}
 
         /* Drive */
         s_Swerve.drive(
