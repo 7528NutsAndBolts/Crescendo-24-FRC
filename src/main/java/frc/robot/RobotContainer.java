@@ -1,28 +1,17 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
+// import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.DoubleHPCommandGroup;
-import frc.robot.commands.FloorIntakeCommandGroup;
-import frc.robot.commands.HomeStateCommandGroup;
-import frc.robot.commands.MidScoreCommandGroup;
-import frc.robot.commands.SingleHPCommandGroup;
-import frc.robot.commands.StoreStateCommandGroup;
-import frc.robot.commands.ValConeCommandGroup;
-import frc.robot.commands.Wrist.UpWrist;
+// import frc.robot.commands.Climb.ClimbSticks;
+import frc.robot.commands.Climb.GoToHomePosition;
+import frc.robot.commands.Climb.JoystickClimb;
 import frc.robot.commands.Drivetrain.PIDTurnToAngle;
 import frc.robot.commands.Drivetrain.TeleopSwerve;
-import frc.robot.commands.Elevator.JoystickElevator;
 // import frc.robot.commands.Elevator.ReadyStateCommandGroup;
-import frc.robot.commands.Intake.ScoreObject;
-import frc.robot.commands.Intake.StoreObjectCommandGroup;
-import frc.robot.commands.LEDs.SetConeMode;
-import frc.robot.commands.LEDs.SetCubeMode;
-import frc.robot.commands.Wrist.DownWrist;
-import frc.robot.commands.Wrist.JoystickWrist;
 import frc.robot.subsystems.*;
 // import frc.robot.auto.AutonomousSelector;
 // import frc.auto.AutonomousSelector;
@@ -48,37 +37,35 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /*Climb Op. Controls */
-    private final int LeftClimbUp = XboxController.Axis.kLeftY.value;
-    private final int RightClimbUp = XboxController.Axis.kRightY.value;
-
+    // private final int leftClimber = XboxController.Axis.kLeftY.value;
+    // private final int rightClimber = XboxController.Axis.kRightY.value;
+    //TODO get tom to help with climber analog shit
     /* Setting Bot to Field Centric */
     private final Boolean robotCentric = false;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value);
-    private final JoystickButton homeButton = new JoystickButton(operator, XboxController.Button.kStart.value);
-    private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton scoreButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+    // private final JoystickButton homeButton = new JoystickButton(operator, XboxController.Button.kStart.value);
+    // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    // private final JoystickButton scoreButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
     private final JoystickButton faceLeftButton = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton faceRightButton = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton faceRearButton = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton faceFrontButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Operator Buttons */
-    private final JoystickButton coneModeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton cubeModeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    private final JoystickButton storeStateButton = new JoystickButton(operator, XboxController.Button.kBack.value);
-    private final JoystickButton singleHPButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton doubleHPButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    private final JoystickButton midLevelButton = new JoystickButton(operator, XboxController.Button.kX.value);
-    private final JoystickButton valLevelButton = new JoystickButton(operator, XboxController.Button.kY.value);
+    // private final JoystickButton coneModeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    // private final JoystickButton cubeModeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton storeClimbStateButton = new JoystickButton(operator, XboxController.Button.kBack.value);
+    // private final JoystickButton singleHPButton = new JoystickButton(operator, XboxController.Button.kA.value);
+    // private final JoystickButton doubleHPButton = new JoystickButton(operator, XboxController.Button.kB.value);
+    // private final JoystickButton midLevelButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    // private final JoystickButton valLevelButton = new JoystickButton(operator, XboxController.Button.kY.value);
 
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    public static Elevator elevator = new Elevator();
-    public static Wrist wrist = new Wrist();
-    public static CANdleSubsystem candleSubsystem = new CANdleSubsystem();
-    public static Intake intake = new Intake();
+    public static Climb climb = new Climb();
+ 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -92,19 +79,21 @@ public class RobotContainer {
             )
         );
 
-    
-        elevator.setDefaultCommand(new JoystickElevator());
-        wrist.setDefaultCommand(new JoystickWrist());
+        // climb.setDefaultCommand(new JoystickClimb());
+        // climb.setDefaultCommand(
+        //     new ClimbSticks( 
+        //         climb,
+        //         () -> -operator.getRawAxis(LeftClimbUp),
+        //         () -> -operator.getRawAxis(RightClimbUp)
+        //     )
+        // );
+
+   
 
         /* Configure the button bindings */
         configureButtonBindings();
 
-        new JoystickButton(operator, XboxController.Button.kLeftStick.value)
-        .whileTrue(new DownWrist(wrist));
-    
-    
-     new JoystickButton(operator, XboxController.Button.kRightStick.value)
-        .whileTrue(new UpWrist(wrist));
+
     }
 
     /**
@@ -118,15 +107,6 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
-        intakeButton.whileTrue(new FloorIntakeCommandGroup()); 
-        intakeButton.whileFalse(new StoreObjectCommandGroup());
-
-        scoreButton.whileTrue(new ScoreObject());
-        scoreButton.whileFalse(new StoreObjectCommandGroup());
-
-        
-
-        homeButton.onTrue(new HomeStateCommandGroup().withTimeout(1.5));
 
         faceLeftButton.whileTrue(new PIDTurnToAngle(
             swerve, 
@@ -161,17 +141,7 @@ public class RobotContainer {
             360));
         
         /* Operator Buttons */
-        coneModeButton.onTrue(new SetConeMode());
-        cubeModeButton.onTrue(new SetCubeMode());
-
-        midLevelButton.onTrue(new MidScoreCommandGroup());
-        valLevelButton.onTrue(new ValConeCommandGroup());
-
-        storeStateButton.onTrue(new StoreStateCommandGroup());
-
-        singleHPButton.onTrue(new SingleHPCommandGroup());
-        doubleHPButton.onTrue(new DoubleHPCommandGroup());
-
+        storeClimbStateButton.onTrue(new GoToHomePosition());
     }
 
     /* Public access to joystick values */
@@ -193,9 +163,9 @@ public class RobotContainer {
         return stickDeadband(this.operator.getRawAxis(1), 0.05, 0.0);
     }
  
-    public double getOperatorRightStickY() {
-        return stickDeadband(this.operator.getRawAxis(5), 0.05, 0.0);
-    }
+    // public double getOperatorRightStickY() {
+    //     return stickDeadband(this.operator.getRawAxis(5), 0.05, 0.0);
+    // }
 
     /* Runs the Autonomous Selector*/
     // public Command getAutonomousCommand() {

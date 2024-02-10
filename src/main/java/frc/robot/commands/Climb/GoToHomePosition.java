@@ -1,30 +1,30 @@
-package frc.robot.commands.Elevator;
+package frc.robot.commands.Climb;
 
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class GoToStorePosition extends Command {
+public class GoToHomePosition extends Command {
 
-	private int desiredPosition = RobotContainer.elevator.getHomePosition();
+	private int desiredPosition = RobotContainer.climb.getHomePosition();
 
 
-	public GoToStorePosition() {
-		addRequirements(RobotContainer.elevator);
+	public GoToHomePosition() {
+		addRequirements(RobotContainer.climb);
 	}
 
 	// Called just before this Command runs the first time
 	public void initialize() {
-		RobotContainer.elevator.setTargetPosition(desiredPosition);
+		RobotContainer.climb.setTargetPosition(desiredPosition);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	public void execute() {
-		RobotContainer.elevator.motionMagicControl();
+		RobotContainer.climb.motionMagicControl();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	public boolean isFinished() {
-		return RobotContainer.elevator.isInPosition(desiredPosition);
+		return RobotContainer.climb.isInPosition(desiredPosition);
 	}
 
 	// Called once after isFinished returns true

@@ -27,7 +27,7 @@ public class COTSFalconSwerveConstants {
         this.angleKP = angleKP;
         this.angleKI = angleKI;
         this.angleKD = angleKD;
-        this.angleKF = angleKF;
+        this.angleKF = angleKF; //changes from V to F on 2/5, watch out to revert
         this.driveMotorInvert = driveMotorInvert2;
         this.angleMotorInvert = angleMotorInvert2;
         this.canCoderInvert = canCoderInvert2;
@@ -43,12 +43,12 @@ public class COTSFalconSwerveConstants {
         double angleKP = 0.2;
         double angleKI = 0.0;
         double angleKD = 0.0;
-        double angleKV = 0.0;
+        double angleKF = 0.0;
  
-        InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+        InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
-        SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKV, driveMotorInvert, angleMotorInvert, canCoderInvert);
+        SensorDirectionValue canCoderInvert = SensorDirectionValue.Clockwise_Positive;
+        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKF, driveMotorInvert, angleMotorInvert, canCoderInvert);
     }
 
     /** Swerve Drive Specialties - MK4 Module*/
@@ -61,12 +61,12 @@ public class COTSFalconSwerveConstants {
         double angleKP = 0.2;
         double angleKI = 0.0;
         double angleKD = 0.0;
-        double angleKV = 0.0;
+        double angleKF = 0.0;
  
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
-        SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKV, driveMotorInvert, angleMotorInvert, canCoderInvert);
+        SensorDirectionValue canCoderInvert = SensorDirectionValue.Clockwise_Positive;
+        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKF, driveMotorInvert, angleMotorInvert, canCoderInvert);
     }
 
     /** Swerve Drive Specialties - MK4i Module*/
@@ -79,12 +79,12 @@ public class COTSFalconSwerveConstants {
         double angleKP = 0.3;
         double angleKI = 0.0;
         double angleKD = 0.0;
-        double angleKV = 0.0;
+        double angleKF = 0.0;
 
-        InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
-        InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
-        SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKV, driveMotorInvert, angleMotorInvert, canCoderInvert);
+        InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;
+        InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
+        SensorDirectionValue canCoderInvert = SensorDirectionValue.Clockwise_Positive;
+        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKF, driveMotorInvert, angleMotorInvert, canCoderInvert);
     }
 
     /* Drive Gear Ratios for all supported modules */

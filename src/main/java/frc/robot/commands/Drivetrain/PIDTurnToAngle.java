@@ -1,7 +1,7 @@
 package frc.robot.commands.Drivetrain;
 
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
+// import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 
 import java.util.function.DoubleSupplier;
@@ -27,7 +27,7 @@ public class PIDTurnToAngle extends Command {
     public double currentAngle = 0;
     public double acceptableError = 0;
 
-    private final PIDController angleController = new PIDController(0.012, 0, 0);
+    private final PIDController angleController = new PIDController(0.012, 0, 0); //ki used to be 0
 
     public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, double targetAngle) {
         this.s_Swerve = s_Swerve;
@@ -42,14 +42,14 @@ public class PIDTurnToAngle extends Command {
     }
 
     public void initialize() {
-        angleController.setTolerance(5);
+        angleController.setTolerance(5); //used to be 5
     }
 
     @Override
     public void execute() {
-        elevatorHeight = RobotContainer.elevator.getCurrentPosition();
-        currentAngle = s_Swerve.getGyroYaw().getDegrees() + 180;
-        rotationVal = angleController.calculate(currentAngle, targetAngle);
+        // elevatorHeight = RobotContainer.elevator.getCurrentPosition();
+        // currentAngle = s_Swerve.getGyroYaw().getDegrees() + 180;
+        // rotationVal = angleController.calculate(currentAngle, targetAngle);
         
         /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
