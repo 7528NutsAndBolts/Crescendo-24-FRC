@@ -16,11 +16,6 @@ public class PIDTurnToAngle extends Command {
     private Swerve s_Swerve;    
     private DoubleSupplier translationSup;
     private DoubleSupplier strafeSup;
-    // private DoubleSupplier rotationSup;
-    // private Boolean robotCentricSup;
-    private double slowSpeed = 0.3;
-    private double elevatorHeight = 0;
-
     public double rotationVal = 0;
 
     public double targetAngle = 0;
@@ -29,14 +24,12 @@ public class PIDTurnToAngle extends Command {
 
     private final PIDController angleController = new PIDController(0.012, 0, 0); //ki used to be 0
 
-    public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, double targetAngle) {
+    public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, int targetAngle) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
-        // this.rotationSup = rotationSup;
-        // this.robotCentricSup = robotCentricSup;
         this.targetAngle = targetAngle;
         angleController.enableContinuousInput(0, 360);
     }
@@ -49,21 +42,21 @@ public class PIDTurnToAngle extends Command {
     public void execute() {
         // elevatorHeight = RobotContainer.elevator.getCurrentPosition();
         // currentAngle = s_Swerve.getGyroYaw().getDegrees() + 180;
-        // rotationVal = angleController.calculate(currentAngle, targetAngle);
+        rotationVal = angleController.calculate(currentAngle, targetAngle);
         
         /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
 
-        if (elevatorHeight >= 30000) {
-            translationVal = translationVal * slowSpeed;
-            strafeVal = strafeVal * slowSpeed;
-        }
+        // if (elevatorHeight >= 30000) {
+        //     translationVal = translationVal * slowSpeed;
+        //     strafeVal = strafeVal * slowSpeed;
+        // }
 
-        else if (elevatorHeight > 5000 && elevatorHeight < 29999) {
-            translationVal = translationVal * 0.5;
-            strafeVal = strafeVal * 0.5;
-        }
+        // else if (elevatorHeight > 5000 && elevatorHeight < 29999) {
+        //     translationVal = translationVal * 0.5;
+        //     strafeVal = strafeVal * 0.5;
+        // }
 
         /* Drive */
         s_Swerve.drive(

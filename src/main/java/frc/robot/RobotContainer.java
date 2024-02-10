@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.commands.Climb.ClimbSticks;
 import frc.robot.commands.Climb.GoToHomePosition;
-import frc.robot.commands.Climb.JoystickClimb;
+// import frc.robot.commands.Climb.JoystickClimb;
 import frc.robot.commands.Drivetrain.PIDTurnToAngle;
 import frc.robot.commands.Drivetrain.TeleopSwerve;
 // import frc.robot.commands.Elevator.ReadyStateCommandGroup;
@@ -37,64 +37,37 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /*Climb Op. Controls */
-<<<<<<< HEAD
-    // private final int leftClimber = XboxController.Axis.kLeftY.value;
-    // private final int rightClimber = XboxController.Axis.kRightY.value;
-    //TODO get tom to help with climber analog shit
-=======
-<<<<<<< HEAD
-    // private final int leftClimber = XboxController.Axis.kLeftY.value;
-    // private final int rightClimber = XboxController.Axis.kRightY.value;
-    //TODO get tom to help with climber analog shit
-=======
-    private final int LeftClimbUp = XboxController.Axis.kLeftY.value;
-    private final int RightClimbUp = XboxController.Axis.kRightY.value;
-
->>>>>>> cecaa8191244576a62f4d40be71cdc6dea2a2b9b
->>>>>>> e3ef82fd7af63224c03cd1d44538532924ae397c
     /* Setting Bot to Field Centric */
-    private final Boolean robotCentric = false;
+    // private final Boolean robotCentric = false;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value);
-    // private final JoystickButton homeButton = new JoystickButton(operator, XboxController.Button.kStart.value);
-    // private final JoystickButton intakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    // private final JoystickButton scoreButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
     private final JoystickButton faceLeftButton = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton faceRightButton = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton faceRearButton = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton faceFrontButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Operator Buttons */
-    // private final JoystickButton coneModeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    // private final JoystickButton cubeModeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     private final JoystickButton storeClimbStateButton = new JoystickButton(operator, XboxController.Button.kBack.value);
-    // private final JoystickButton singleHPButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    // private final JoystickButton doubleHPButton = new JoystickButton(operator, XboxController.Button.kB.value);
-    // private final JoystickButton midLevelButton = new JoystickButton(operator, XboxController.Button.kX.value);
-    // private final JoystickButton valLevelButton = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton robotCentric = new JoystickButton(operator, XboxController.Button.kStart.value);
 
     /* Subsystems */
-    private final Swerve swerve = new Swerve();
+    private final Swerve s_Swerve = new Swerve();
     public static Climb climb = new Climb();
  
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        swerve.setDefaultCommand(
+        s_Swerve.setDefaultCommand(
             new TeleopSwerve(
-                swerve, 
+                s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                robotCentric
+                () -> robotCentric.getAsBoolean()
             )
         );
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> e3ef82fd7af63224c03cd1d44538532924ae397c
         // climb.setDefaultCommand(new JoystickClimb());
         // climb.setDefaultCommand(
         //     new ClimbSticks( 
@@ -105,14 +78,6 @@ public class RobotContainer {
         // );
 
    
-<<<<<<< HEAD
-=======
-=======
-    
-        elevator.setDefaultCommand(new JoystickElevator());
-        wrist.setDefaultCommand(new JoystickWrist());
->>>>>>> cecaa8191244576a62f4d40be71cdc6dea2a2b9b
->>>>>>> e3ef82fd7af63224c03cd1d44538532924ae397c
 
         /* Configure the button bindings */
         configureButtonBindings();
@@ -129,39 +94,39 @@ public class RobotContainer {
     private void configureButtonBindings() {
         
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
 
         faceLeftButton.whileTrue(new PIDTurnToAngle(
-            swerve, 
+            s_Swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric,
+            robotCentric.getAsBoolean(),
             270));
 
         faceRightButton.whileTrue(new PIDTurnToAngle(
-            swerve, 
+            s_Swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric,
+            robotCentric.getAsBoolean(),
             90));
 
         faceFrontButton.whileTrue(new PIDTurnToAngle(
-            swerve, 
+            s_Swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric,
+            robotCentric.getAsBoolean(),
             180));
                 
         faceRearButton.whileTrue(new PIDTurnToAngle(
-            swerve, 
+            s_Swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric,
+            robotCentric.getAsBoolean(),
             360));
         
         /* Operator Buttons */

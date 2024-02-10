@@ -40,58 +40,38 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 
     private double peakOutputReverse = -0.1;
 
-    private CustomTalonFX leftClimber = new CustomTalonFX(9);
-    private CustomTalonFX rightClimber = new CustomTalonFX(10);
+    private CustomTalonFX Climber = new CustomTalonFX(9);
 
     public Climb() {
-        leftClimber.configFactoryDefault();
-        leftClimber.clearStickyFaults();
-        rightClimber.configFactoryDefault();
-        rightClimber.clearStickyFaults();
+        Climber.configFactoryDefault();
+        Climber.clearStickyFaults();
 
-        this.leftClimber.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
-        this.rightClimber.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        this.Climber.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-        this.leftClimber.configForwardSoftLimitEnable(true);
-        this.leftClimber.configForwardSoftLimitThreshold(upPositionLimit);
-        this.rightClimber.configForwardSoftLimitEnable(true);
-        this.rightClimber.configForwardSoftLimitThreshold(upPositionLimit);
+        this.Climber.configForwardSoftLimitEnable(true);
+        this.Climber.configForwardSoftLimitThreshold(upPositionLimit);
 
-        this.leftClimber.configReverseSoftLimitEnable(true);
-        this.leftClimber.configReverseSoftLimitThreshold(downPositionLimit);
-        this.rightClimber.configReverseSoftLimitEnable(true);
-        this.rightClimber.configReverseSoftLimitThreshold(downPositionLimit);
+        this.Climber.configReverseSoftLimitEnable(true);
+        this.Climber.configReverseSoftLimitThreshold(downPositionLimit);
 
-        this.leftClimber.setInverted(false);
-        this.leftClimber.setSensorPhase(false);
-        this.rightClimber.setInverted(false);
-        this.rightClimber.setSensorPhase(false);
+        this.Climber.setInverted(false);
+        this.Climber.setSensorPhase(false);
 
-        this.leftClimber.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 150);
-        this.leftClimber.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 150);
-        this.rightClimber.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 150);
-        this.rightClimber.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic,150);
+        this.Climber.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 150);
+        this.Climber.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 150);
 
-        this.leftClimber.configMotionParameters(highGearUpMotionParameters);
-        this.leftClimber.configMotionParameters(highGearDownMotionParameters);
-        this.rightClimber.configMotionParameters(highGearDownMotionParameters);
-        this.rightClimber.configMotionParameters(highGearUpMotionParameters);
+        this.Climber.configMotionParameters(highGearUpMotionParameters);
+        this.Climber.configMotionParameters(highGearDownMotionParameters);
 
-        this.leftClimber.setNeutralMode(NeutralMode.Brake);
-        this.leftClimber.configClosedloopRamp(0.25);
-        this.rightClimber.setNeutralMode(NeutralMode.Brake);
-        this.rightClimber.configClosedloopRamp(0.25);
+        this.Climber.setNeutralMode(NeutralMode.Brake);
+        this.Climber.configClosedloopRamp(0.25);
 
-        this.leftClimber.configVoltageCompSaturation(12);
-        this.leftClimber.enableVoltageCompensation(true);
-        this.rightClimber.configVoltageCompSaturation(12);
-        this.rightClimber.enableVoltageCompensation(true);
+        this.Climber.configVoltageCompSaturation(12);
+        this.Climber.enableVoltageCompensation(true);
 
-        this.leftClimber.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 65, 70, 0.2));
-        this.rightClimber.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 65, 70, 0.2));
+        this.Climber.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 65, 70, 0.2));
         
-        this.leftClimber.configPeakOutputReverse(peakOutputReverse);
-        this.rightClimber.configPeakOutputReverse(peakOutputReverse);
+        this.Climber.configPeakOutputReverse(peakOutputReverse);
 
         this.resetClimbEncoder();
     }
@@ -100,30 +80,27 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 		if (controlMode == ControlMode.MotionMagic) {
 			this.manageMotion(signal);
 		}
-		leftClimber.set(controlMode, signal);
-	    rightClimber.set(controlMode, signal);
+		Climber.set(controlMode, signal);
 	}
 
 	public void setClimb(ControlMode controlMode, double signal, DemandType demandType, double demand) {
 		if (controlMode == ControlMode.MotionMagic) {
 			this.manageMotion(signal);
 		}
-		leftClimber.set(controlMode, signal, demandType, demand);
-		rightClimber.set(controlMode, signal, demandType, demand);
+		Climber.set(controlMode, signal, demandType, demand);
 	}
 
 	public void motionMagicControl() {
 		this.manageMotion(targetPosition);
-		this.leftClimber.set(ControlMode.MotionMagic, targetPosition, DemandType.ArbitraryFeedForward, arbitraryFeedForward);
-		this.rightClimber.set(ControlMode.MotionMagic, targetPosition, DemandType.ArbitraryFeedForward, arbitraryFeedForward);
+		this.Climber.set(ControlMode.MotionMagic, targetPosition, DemandType.ArbitraryFeedForward, arbitraryFeedForward);
 	}
 
 	public double getCurrentPosition() {
-		return this.leftClimber.getSelectedSensorPosition();
+		return this.Climber.getSelectedSensorPosition();
 	}
 
 	public double getCurrentDraw() {
-		return this.leftClimber.getSupplyCurrent();
+		return this.Climber.getSupplyCurrent();
 	}
 
 	public boolean isHoldingPosition() {
@@ -179,7 +156,7 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 
 	public void resetClimbEncoder() {
         try {
-			leftClimber.setSelectedSensorPosition(0, 0, 30);
+			Climber.setSelectedSensorPosition(0, 0, 30);
         }
         catch (Exception e) {
             DriverStation.reportError("Elevator.resetElevatorEncoders exception.  You're Screwed! : " + e.toString(), false);
@@ -202,10 +179,10 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 	public void manageMotion(double targetPosition) {
 		double currentPosition = getCurrentPosition();
 		if (currentPosition < targetPosition) {
-				leftClimber.selectMotionParameters(highGearUpMotionParameters);
+				Climber.selectMotionParameters(highGearUpMotionParameters);
 		}
 		else {
-				leftClimber.selectMotionParameters(highGearDownMotionParameters);
+				Climber.selectMotionParameters(highGearDownMotionParameters);
 		}
 	}
 
@@ -219,13 +196,13 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 		SmartDashboard.putNumber("Elevator Position Error", this.getPositionError());
 		SmartDashboard.putNumber("Elevator Velocity", this.getCurrentVelocity());
 		SmartDashboard.putNumber("Elevator Current", this.getCurrentDraw());
-		SmartDashboard.putNumber("Elevator Voltage", this.leftClimber.getMotorOutputVoltage());
+		SmartDashboard.putNumber("Elevator Voltage", this.Climber.getMotorOutputVoltage());
 		
 	}
 
 	@Override
 	public double getCurrentVelocity() {
-		double currentVelocity = this.leftClimber.getSelectedSensorVelocity();
+		double currentVelocity = this.Climber.getSelectedSensorVelocity();
 		return currentVelocity;
 	}
 
