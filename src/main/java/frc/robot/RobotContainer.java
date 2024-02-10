@@ -47,6 +47,10 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
+    /*Climb Op. Controls */
+    private final int LeftClimbUp = XboxController.Axis.kLeftY.value;
+    private final int RightClimbUp = XboxController.Axis.kRightY.value;
+
     /* Setting Bot to Field Centric */
     private final Boolean robotCentric = false;
 
@@ -88,6 +92,7 @@ public class RobotContainer {
             )
         );
 
+    
         elevator.setDefaultCommand(new JoystickElevator());
         wrist.setDefaultCommand(new JoystickWrist());
 
