@@ -27,47 +27,47 @@ public class COTSFalconSwerveConstants {
         this.angleKP = angleKP;
         this.angleKI = angleKI;
         this.angleKD = angleKD;
-        this.angleKF = angleKF;
+        this.angleKF = angleKF; //changes from V to F on 2/5, watch out to revert
         this.driveMotorInvert = driveMotorInvert2;
         this.angleMotorInvert = angleMotorInvert2;
         this.canCoderInvert = canCoderInvert2;
     }
 
     /** Swerve Drive Specialties - MK3 Module*/
-    public static COTSFalconSwerveConstants SDSMK3(double driveGearRatio){
-        double wheelDiameter = Units.inchesToMeters(4.0);
+//     public static COTSFalconSwerveConstants SDSMK3(double driveGearRatio){
+//         double wheelDiameter = Units.inchesToMeters(4.0);
  
-        /** 12.8 : 1 */
-        double angleGearRatio = (12.8 / 1.0);
+//         /** 12.8 : 1 */
+//         double angleGearRatio = (12.8 / 1.0);
  
-        double angleKP = 0.2;
-        double angleKI = 0.0;
-        double angleKD = 0.0;
-        double angleKV = 0.0;
+//         double angleKP = 1.0;
+//         double angleKI = 0.0;
+//         double angleKD = 0.0;
+//         double angleKF = 0.0;
  
-        InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
-        InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
-        SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKV, driveMotorInvert, angleMotorInvert, canCoderInvert);
-    }
+//         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+//         InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
+//         SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
+//         return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKF, driveMotorInvert, angleMotorInvert, canCoderInvert);
+//     }
 
-    /** Swerve Drive Specialties - MK4 Module*/
-    public static COTSFalconSwerveConstants SDSMK4(double driveGearRatio){
-        double wheelDiameter = Units.inchesToMeters(4.0);
+//     /** Swerve Drive Specialties - MK4 Module*/
+//     public static COTSFalconSwerveConstants SDSMK4(double driveGearRatio){
+//         double wheelDiameter = Units.inchesToMeters(4.0);
  
-        /** 12.8 : 1 */
-        double angleGearRatio = (12.8 / 1.0);
+//         /** 12.8 : 1 */
+//         double angleGearRatio = (12.8 / 1.0);
  
-        double angleKP = 0.2;
-        double angleKI = 0.0;
-        double angleKD = 0.0;
-        double angleKV = 0.0;
+//         double angleKP = 1.0;
+//         double angleKI = 0.0;
+//         double angleKD = 0.0;
+//         double angleKF = 0.0;
  
-        InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
-        InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
-        SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKV, driveMotorInvert, angleMotorInvert, canCoderInvert);
-    }
+//         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+//         InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
+//         SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
+//         return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKF, driveMotorInvert, angleMotorInvert, canCoderInvert);
+//     }
 
     /** Swerve Drive Specialties - MK4i Module*/
     public static COTSFalconSwerveConstants SDSMK4i(double driveGearRatio){
@@ -76,34 +76,34 @@ public class COTSFalconSwerveConstants {
         /** (150 / 7) : 1 */
         double angleGearRatio = ((150.0 / 7.0) / 1.0);
 
-        double angleKP = 0.3;
+        double angleKP = 100.0;
         double angleKI = 0.0;
         double angleKD = 0.0;
-        double angleKV = 0.0;
+        double angleKF = 0.0;
 
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
         SensorDirectionValue canCoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKV, driveMotorInvert, angleMotorInvert, canCoderInvert);
+        return new COTSFalconSwerveConstants(wheelDiameter, angleGearRatio, driveGearRatio, angleKP, angleKI, angleKD, angleKF, driveMotorInvert, angleMotorInvert, canCoderInvert);
     }
 
-    /* Drive Gear Ratios for all supported modules */
+//     /* Drive Gear Ratios for all supported modules */
     public class driveGearRatios{
-        /* SDS MK3 */
-        /** SDS MK3 - 8.16 : 1 */
-        public static final double SDSMK3_Standard = (8.16 / 1.0);
-        /** SDS MK3 - 6.86 : 1 */
-        public static final double SDSMK3_Fast = (6.86 / 1.0);
+//         /* SDS MK3 */
+//         /** SDS MK3 - 8.16 : 1 */
+//         public static final double SDSMK3_Standard = (8.16 / 1.0);
+//         /** SDS MK3 - 6.86 : 1 */
+//         public static final double SDSMK3_Fast = (6.86 / 1.0);
 
-        /* SDS MK4 */
-        /** SDS MK4 - 8.14 : 1 */
-        public static final double SDSMK4_L1 = (8.14 / 1.0);
-        /** SDS MK4 - 6.75 : 1 */
-        public static final double SDSMK4_L2 = (6.75 / 1.0);
-        /** SDS MK4 - 6.12 : 1 */
-        public static final double SDSMK4_L3 = (6.12 / 1.0);
-        /** SDS MK4 - 5.14 : 1 */
-        public static final double SDSMK4_L4 = (5.14 / 1.0);
+//         /* SDS MK4 */
+//         /** SDS MK4 - 8.14 : 1 */
+//         public static final double SDSMK4_L1 = (8.14 / 1.0);
+//         /** SDS MK4 - 6.75 : 1 */
+//         public static final double SDSMK4_L2 = (6.75 / 1.0);
+//         /** SDS MK4 - 6.12 : 1 */
+//         public static final double SDSMK4_L3 = (6.12 / 1.0);
+//         /** SDS MK4 - 5.14 : 1 */
+//         public static final double SDSMK4_L4 = (5.14 / 1.0);
         
         /* SDS MK4i */
         /** SDS MK4i - 8.14 : 1 */
@@ -114,5 +114,6 @@ public class COTSFalconSwerveConstants {
         public static final double SDSMK4i_L3 = (6.12 / 1.0);
     }
 }
+
 
   

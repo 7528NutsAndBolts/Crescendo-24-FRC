@@ -27,11 +27,11 @@ public class SwerveModule {
     private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     /* driver motor control requests */
-    private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
-    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
+    private final DutyCycleOut driveDutyCycle = new DutyCycleOut(1.0); //was 0
+    private final VelocityVoltage driveVelocity = new VelocityVoltage(4.5); //was 0
 
     /* angle motor control requests */
-    private final PositionVoltage anglePosition = new PositionVoltage(0);
+    private final PositionVoltage anglePosition = new PositionVoltage(0); //was 0
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
@@ -51,6 +51,8 @@ public class SwerveModule {
         mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
         mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0.0);
+
+        // lastAngle = getState().angle;
 
     }
 
@@ -75,19 +77,6 @@ public class SwerveModule {
         }
     }
 
-    // private void setAngle(SwerveModuleState desiredState){
-    //     Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (Constants.Swerve.maxSpeed * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
-        
-    //     mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), Constants.Swerve.angleGearRatio));
-    //     lastAngle = angle;
-    // }
-
-    // private Rotation2d getAngle(){
-    //     // (mAngleMotor.getSelectedSensorPosition());
-    //     return Rotation2d.fromDegrees(Conversions.falconToDegrees(mAngleMotor.getSelectedSensorPosition(), Constants.Swerve.angleGearRatio));
-
-    // }
-
     public Rotation2d getCANcoder(){
         return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
     }
@@ -97,40 +86,16 @@ public class SwerveModule {
         mAngleMotor.setPosition(absolutePosition);
     }
 
-    // private void configAngleEncoder(){        
-    //     angleEncoder.configFactoryDefault();
-    //     angleEncoder.configAllSettings(Robot.ctreConfigs.swerveCanCoderConfig);
-    // }
-
-    // private void configAngleMotor(){
-    //     mAngleMotor.configFactoryDefault();
-    //     mAngleMotor.configAllSettings(Robot.ctreConfigs.swerveAngleFXConfig);
-    //     mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
-    //     mAngleMotor.setNeutralMode(Constants.Swerve.angleNeutralMode);
-    //     resetToAbsolute();
-    // }
-
-    // private void configDriveMotor(){        
-    //     mDriveMotor.configFactoryDefault();
-    //     mDriveMotor.configAllSettings(Robot.ctreConfigs.swerveDriveFXConfig);
-    //     mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert);
-    //     mDriveMotor.setNeutralMode(Constants.Swerve.driveNeutralMode);
-    //     mDriveMotor.setSelectedSensorPosition(0);
-    // }
-
-
-
     public SwerveModuleState getState(){
         return new SwerveModuleState(
-            Conversions.RPSToMPS(mDriveMotor.getVelocity().getValue(), Constants.Swerve.wheelCircumference),
+            Conversions.RPSToMPS(mDriveMotor.getVelocity().getValue(), Constants.Swerve.wheelCircumference), 
             Rotation2d.fromRotations(mAngleMotor.getPosition().getValue())
-            
-        ); 
+        );
     }
 
     public SwerveModulePosition getPosition(){
         return new SwerveModulePosition(
-            Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.wheelCircumference),
+            Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.wheelCircumference), 
             Rotation2d.fromRotations(mAngleMotor.getPosition().getValue())
         );
     }

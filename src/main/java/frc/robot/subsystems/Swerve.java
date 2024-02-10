@@ -181,9 +181,9 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public void stopDrive(){
-        drive(new Translation2d(0, 0), 0, true, true);
-    }
+    // public void stopDrive(){
+    //     drive(new Translation2d(0, 0), 0, true, true);
+    // }
 
     // public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
     //     PIDController thetaController = new PIDController(3, 0, 0);
@@ -213,6 +213,8 @@ public class Swerve extends SubsystemBase {
     //         );
         
     // }
+
+    
 
         
 

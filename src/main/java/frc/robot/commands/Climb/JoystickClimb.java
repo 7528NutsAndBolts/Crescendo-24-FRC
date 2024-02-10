@@ -1,15 +1,15 @@
-package frc.robot.commands.Wrist;
+package frc.robot.commands.Climb;
 
 import frc.robot.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class JoystickWrist extends Command {
+public class JoystickClimb extends Command {
 
-	private int positionIncrement = 2000;
+	private int positionIncrement = 10000;
 
-	public JoystickWrist() {
-		addRequirements(RobotContainer.wrist);
+	public JoystickClimb() {
+		addRequirements(RobotContainer.climb);
 	}
 
 	// Called just before this Command runs the first time
@@ -21,11 +21,11 @@ public class JoystickWrist extends Command {
 	public void execute() {
 
 		// joystick control
-		double wristSignal = -RobotContainer.wrist.JoyStickWrist();
+		double climbSignal = -RobotContainer.climb.JoyStickClimb();
         
-		RobotContainer.wrist.incrementTargetPosition((int) (wristSignal * positionIncrement));
+		RobotContainer.climb.incrementTargetPosition((int) (climbSignal * positionIncrement));
 
-		RobotContainer.wrist.motionMagicControl();
+		RobotContainer.climb.motionMagicControl();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
