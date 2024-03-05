@@ -5,7 +5,7 @@ public interface IPositionControlledSubsystem {
 	public double targetPosition = 0;
 	public double onTargetThreshold = 0;
 
-	public boolean setTargetPosition(int targetPosition);
+	public boolean setTargetPosition(double targetPosition);
 
 	public double getTargetPosition();
 
@@ -15,5 +15,5 @@ public interface IPositionControlledSubsystem {
 
 	public void motionMagicControl();
 
-	public boolean isInPosition(int targetPosition);
+	public boolean isInPosition(double targetPosition);
 }

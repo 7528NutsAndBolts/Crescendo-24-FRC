@@ -6,16 +6,28 @@ import edu.wpi.first.wpilibj.XboxController;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import frc.robot.commands.Climb.ClimbSticks;
 import frc.robot.commands.Climb.GoToHomePosition;
-// import frc.robot.commands.Climb.JoystickClimb;
+import frc.robot.commands.Climb.JoystickClimb;
+import frc.robot.commands.CommandGroups.GoToAmpCommandGroup;
+import frc.robot.commands.CommandGroups.StoreStateCommandGroup;
 import frc.robot.commands.Drivetrain.PIDTurnToAngle;
+// import frc.robot.commands.Climb.ClimbSticks;
+// import frc.robot.commands.Climb.GoToHomePosition;
+// import frc.robot.commands.Climb.JoystickClimb;
+// import frc.robot.commands.Drivetrain.PIDTurnToAngle;
 import frc.robot.commands.Drivetrain.TeleopSwerve;
+import frc.robot.commands.Intake.IntakeObject;
+import frc.robot.commands.Intake.StopIntake;
+import frc.robot.commands.Sweeper.UpSweeper;
 // import frc.robot.commands.Elevator.ReadyStateCommandGroup;
 import frc.robot.subsystems.*;
 // import frc.robot.auto.AutonomousSelector;
 // import frc.auto.AutonomousSelector;
 // import frc.robot.auto.DefaultAuto;
+import frc.robot.subsystems.Limelight.LimelightAmp;
+import frc.robot.subsystems.Limelight.LimelightSource;
+// import frc.robot.subsystems.Vision.VisionModule;
+// import frc.robot.subsystems.Vision.VisionPipelineRunnable;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,9 +48,9 @@ public class RobotContainer {
     private final int strafeAxis = XboxController.Axis.kLeftX.value;
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
-    /*Climb Op. Controls */
+   
     /* Setting Bot to Field Centric */
-    // private final Boolean robotCentric = false;
+    private final Boolean robotCentric = false;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value);
@@ -49,11 +61,19 @@ public class RobotContainer {
 
     /* Operator Buttons */
     private final JoystickButton storeClimbStateButton = new JoystickButton(operator, XboxController.Button.kBack.value);
-    private final JoystickButton robotCentric = new JoystickButton(operator, XboxController.Button.kStart.value);
+    // private final JoystickButton robotCentric = new JoystickButton(operator, XboxController.Button.kStart.value);
+    private final JoystickButton runIntakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton ampButton = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton defaultPositionButton = new JoystickButton(operator, XboxController.Button.kStart.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     public static Climb climb = new Climb();
+    public static Intake intake = new Intake();
+    public static IntakeSupport intakesupport = new IntakeSupport();
+    public static Drake sweeper = new Drake();
+    public static LimelightAmp limelightamp = new LimelightAmp();
+    public static LimelightSource limelightsource = new LimelightSource();
  
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -64,23 +84,23 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                robotCentric
             )
         );
 
-        // climb.setDefaultCommand(new JoystickClimb());
-        // climb.setDefaultCommand(
-        //     new ClimbSticks( 
-        //         climb,
-        //         () -> -operator.getRawAxis(LeftClimbUp),
-        //         () -> -operator.getRawAxis(RightClimbUp)
-        //     )
-        // );
+        climb.setDefaultCommand(new JoystickClimb());
 
+        intake.setDefaultCommand(new StopIntake());
+
+        sweeper.setDefaultCommand(new UpSweeper());
    
 
         /* Configure the button bindings */
         configureButtonBindings();
+
+        // Thread visionThread = new Thread(new VisionPipelineRunnable(VisionModule.getInstance()), "visionThread");
+        // visionThread.setDaemon(true);
+        // visionThread.start();
 
 
     }
@@ -94,7 +114,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
 
         faceLeftButton.whileTrue(new PIDTurnToAngle(
@@ -102,7 +122,7 @@ public class RobotContainer {
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric.getAsBoolean(),
+            robotCentric,
             270));
 
         faceRightButton.whileTrue(new PIDTurnToAngle(
@@ -110,7 +130,7 @@ public class RobotContainer {
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric.getAsBoolean(),
+            robotCentric,
             90));
 
         faceFrontButton.whileTrue(new PIDTurnToAngle(
@@ -118,7 +138,7 @@ public class RobotContainer {
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric.getAsBoolean(),
+            robotCentric,
             180));
                 
         faceRearButton.whileTrue(new PIDTurnToAngle(
@@ -126,11 +146,18 @@ public class RobotContainer {
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
-            robotCentric.getAsBoolean(),
+            robotCentric,
             360));
         
+
+
+
         /* Operator Buttons */
         storeClimbStateButton.onTrue(new GoToHomePosition());
+        runIntakeButton.onTrue(new IntakeObject());
+        ampButton.onTrue(new GoToAmpCommandGroup());
+        defaultPositionButton.onTrue(new StoreStateCommandGroup());
+        
     }
 
     /* Public access to joystick values */
@@ -152,9 +179,9 @@ public class RobotContainer {
         return stickDeadband(this.operator.getRawAxis(1), 0.05, 0.0);
     }
  
-    // public double getOperatorRightStickY() {
-    //     return stickDeadband(this.operator.getRawAxis(5), 0.05, 0.0);
-    // }
+    public double getOperatorRightStickY() {
+        return stickDeadband(this.operator.getRawAxis(5), 0.05, 0.0);
+    }
 
     /* Runs the Autonomous Selector*/
     // public Command getAutonomousCommand() {

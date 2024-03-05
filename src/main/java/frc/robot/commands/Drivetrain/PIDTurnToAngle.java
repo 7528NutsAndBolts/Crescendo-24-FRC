@@ -22,9 +22,9 @@ public class PIDTurnToAngle extends Command {
     public double currentAngle = 0;
     public double acceptableError = 0;
 
-    private final PIDController angleController = new PIDController(0.012, 0, 0); //ki used to be 0
+    private final PIDController angleController = new PIDController(0, 0, 0); //ki used to be 0
 
-    public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, int targetAngle) {
+    public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, double targetAngle) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
@@ -35,28 +35,19 @@ public class PIDTurnToAngle extends Command {
     }
 
     public void initialize() {
-        angleController.setTolerance(5); //used to be 5
+        angleController.setTolerance(1); //used to be 5
     }
 
     @Override
     public void execute() {
-        // elevatorHeight = RobotContainer.elevator.getCurrentPosition();
-        // currentAngle = s_Swerve.getGyroYaw().getDegrees() + 180;
+        currentAngle = s_Swerve.getGyroYaw().getDegrees() + 180;
         rotationVal = angleController.calculate(currentAngle, targetAngle);
         
         /* Get Values, Deadband*/
         double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
 
-        // if (elevatorHeight >= 30000) {
-        //     translationVal = translationVal * slowSpeed;
-        //     strafeVal = strafeVal * slowSpeed;
-        // }
-
-        // else if (elevatorHeight > 5000 && elevatorHeight < 29999) {
-        //     translationVal = translationVal * 0.5;
-        //     strafeVal = strafeVal * 0.5;
-        // }
+        
 
         /* Drive */
         s_Swerve.drive(

@@ -1,9 +1,11 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.AxisCamera;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.cameraserver.CameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -12,11 +14,11 @@ import edu.wpi.first.cameraserver.CameraServer;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static CTREConfigs ctreConfigs;
-
+  public static CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
-
-  public static RobotContainer m_robotContainer;
+  public static AxisCamera limelightamp;
+  public static AxisCamera limelightsource;
+  public static RobotContainer robotContainer;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -24,11 +26,25 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCapture();
     ctreConfigs = new CTREConfigs();
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+  
+
+    limelightamp = CameraServer.addAxisCamera("limelightamp", "10.75.28.2");
+    RobotContainer.limelightamp.cameraMode();
+    NetworkTableInstance.getDefault().getTable("limelightamp").getEntry("stream").setNumber(2);
+    limelightamp.setFPS(30);
+    limelightamp.setResolution(1280, 720);
+
+    limelightsource = CameraServer.addAxisCamera("limelightsource", "10.75.28.2");
+    RobotContainer.limelightsource.cameraMode();
+    NetworkTableInstance.getDefault().getTable("limelightsource").getEntry("stream").setNumber(2);
+    limelightsource.setFPS(30);
+    limelightsource.setResolution(1280, 720);
+
+    robotContainer = new RobotContainer();
   }
 
   /**
@@ -45,8 +61,12 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    //RobotContainer.wrist.updateDashboard();
-    //RobotContainer.elevator.updateDashboard();
+
+    RobotContainer.climb.updateDashboard();
+    RobotContainer.intakesupport.updateDashboard();
+    RobotContainer.sweeper.updateDashboard();
+    RobotContainer.limelightamp.updateDashboard();
+    RobotContainer.limelightsource.updateDashboard();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

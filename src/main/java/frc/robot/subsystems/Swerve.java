@@ -47,7 +47,7 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
-        zeroGyro();
+        // zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.FrontLeft.constants),
@@ -62,14 +62,15 @@ public class Swerve extends SubsystemBase {
          * See https://github.com/Team364/BaseFalconSwerve/issues/8 for more info.
          */
         // Timer.delay(1.0);
-        resetModulesToAbsolute();
+        // resetModulesToAbsolute();
 
         // int startingAprilTag = (int) SmartDashboard.getNumber("Starting April Tag ID", 1);
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+        SwerveModuleState[] swerveModuleStates = 
+            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(),
                         translation.getY(),
@@ -146,13 +147,13 @@ public class Swerve extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
-    public void zeroGyro() {
-        gyro.setYaw(0);
-    }
+    // public void zeroGyro() {
+    //     gyro.setYaw(0);
+    // }
 
-    public void autozeroGyro() {
-        gyro.setYaw(180); //for autozero, robot is flipped but still field-oriented
-    }
+    // public void autozeroGyro() {
+    //     gyro.setYaw(180); //for autozero, robot is flipped but still field-oriented
+    // }
 
     // public Rotation2d getYaw() {
     //     return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw())

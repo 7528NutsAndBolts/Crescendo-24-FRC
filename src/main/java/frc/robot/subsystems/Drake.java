@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
 import frc.lib.models.*;
-import frc.robot.Robot;
-// import frc.robot.commands.Climb.ClimbSticks;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -14,15 +11,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Climb extends SubsystemBase implements IPositionControlledSubsystem {
+public class Drake extends SubsystemBase implements IPositionControlledSubsystem {
 
-    private boolean isHoldingPosition = false;
+  private boolean isHoldingPosition = false;
 
     private double homePosition = 0;
-    private double maxUpTravelPosition = 60000;
+    private double maxUpTravelPosition = 15002;
 
-    public final static int Climb_UP = 0;
-    public final static int Climb_DOWN = 1;
+    private double sweepPosition = 15000;
 
     public double upPositionLimit = maxUpTravelPosition;
     public double downPositionLimit = 0;
@@ -34,55 +30,55 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 
     private final static double onTargetThreshold = 1; //might wanna lower this down
 
-	public TalonFXConfiguration ClimbConfiguration = new TalonFXConfiguration();
+	public TalonFXConfiguration DrakeConfiguration = new TalonFXConfiguration();
 
-    private TalonFX Climber = new TalonFX(9);
+    private TalonFX Sweeper = new TalonFX(14);
 
-    public Climb() {
+    public Drake() {
 
-        Climber.clearStickyFaults();
+        Sweeper.clearStickyFaults();
 
-		ClimbConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-		ClimbConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+		DrakeConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+		DrakeConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
-		ClimbConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
-		ClimbConfiguration.CurrentLimits.SupplyCurrentLimit = 30;
-		ClimbConfiguration.CurrentLimits.SupplyCurrentThreshold = 40;
-		ClimbConfiguration.CurrentLimits.SupplyTimeThreshold = 0.1;
+		DrakeConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
+		DrakeConfiguration.CurrentLimits.SupplyCurrentLimit = 30;
+		DrakeConfiguration.CurrentLimits.SupplyCurrentThreshold = 40;
+		DrakeConfiguration.CurrentLimits.SupplyTimeThreshold = 0.1;
 
 		/* Pid Config */
-		ClimbConfiguration.Slot0.kP = 0.0;
-		ClimbConfiguration.Slot0.kI = 0;
-		ClimbConfiguration.Slot0.kD = 0;
+		DrakeConfiguration.Slot0.kP = 0.0;
+		DrakeConfiguration.Slot0.kI = 0;
+		DrakeConfiguration.Slot0.kD = 0;
 
-		ClimbConfiguration.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.1;
-		ClimbConfiguration.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.1;
+		DrakeConfiguration.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.1;
+		DrakeConfiguration.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.1;
 
-		ClimbConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
-		ClimbConfiguration.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
+		DrakeConfiguration.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.1;
+		DrakeConfiguration.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.1;
 
 		/* Config Acceleration & Velocity */
-		ClimbConfiguration.MotionMagic.withMotionMagicAcceleration(0);
-		ClimbConfiguration.MotionMagic.withMotionMagicCruiseVelocity(200);
+		DrakeConfiguration.MotionMagic.withMotionMagicAcceleration(0);
+		DrakeConfiguration.MotionMagic.withMotionMagicCruiseVelocity(200);
 
 		/* Config Motors */
-		Climber.getConfigurator().apply(ClimbConfiguration);
-		Climber.getConfigurator().setPosition(0.0);
+		Sweeper.getConfigurator().apply(DrakeConfiguration);
+		Sweeper.getConfigurator().setPosition(0.0);
     }
 
 	public void motionMagicControl() {
 		this.manageMotion(targetPosition);
 	targetPositionDutyCycle.withPosition(targetPosition);
 	targetPositionDutyCycle.withFeedForward(feedForward);
-		this.Climber.setControl(targetPositionDutyCycle);
+		this.Sweeper.setControl(targetPositionDutyCycle);
 	}
 
 	public double getCurrentPosition() {
-		return this.Climber.getRotorPosition().getValueAsDouble();
+		return this.Sweeper.getRotorPosition().getValueAsDouble();
 	}
 
 	public double getCurrentDraw() {
-		return this.Climber.getSupplyCurrent().getValueAsDouble();
+		return this.Sweeper.getSupplyCurrent().getValueAsDouble();
 	}
 
 	public boolean isHoldingPosition() {
@@ -132,24 +128,23 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 		return this.maxUpTravelPosition;
 	}
 
+    public double getSweepPosition() {
+        return this.sweepPosition;
+    }
+
 	public double getFeedForward() {
 		return this.feedForward;
 	}
 
 	public void resetWristEncoder() {
         try {
-			Climber.getConfigurator().setPosition(0.0);
+			Sweeper.getConfigurator().setPosition(0.0);
         }
         catch (Exception e) {
-            DriverStation.reportError("Wrist.resetWristEncoders exception.  You're Screwed! : " + e.toString(), false);
+            DriverStation.reportError("Sweeper.resetSweeperEncoders exception.  You're Screwed! : " + e.toString(), false);
         }
 	}
 
-	public double JoyStickClimb(){
-		double value = 0;
-		value = Robot.robotContainer.getOperatorLeftStickY();
-		return value;
-	}
 	public double getPositionError() {
 		double currentPosition = this.getCurrentPosition();
 		double targetPosition = this.getTargetPosition();
@@ -172,16 +167,16 @@ public class Climb extends SubsystemBase implements IPositionControlledSubsystem
 	}
 
 	public void updateDashboard() {
-		SmartDashboard.putNumber("Climber Position", this.getCurrentPosition());
-		SmartDashboard.putNumber("Climber Target Position", this.getTargetPosition());
-		SmartDashboard.putNumber("Climber Position Error", this.getPositionError());
-		SmartDashboard.putNumber("Climber Velocity", this.getCurrentVelocity());
-		SmartDashboard.putNumber("Climber Current", this.getCurrentDraw());
+		SmartDashboard.putNumber("Sweeper Position", this.getCurrentPosition());
+		SmartDashboard.putNumber("Sweeper Target Position", this.getTargetPosition());
+		SmartDashboard.putNumber("Sweeper Position Error", this.getPositionError());
+		SmartDashboard.putNumber("Sweeper Velocity", this.getCurrentVelocity());
+		SmartDashboard.putNumber("Sweeper Current", this.getCurrentDraw());
 	}
 
 	@Override
 	public double getCurrentVelocity() {
-		double currentVelocity = this.Climber.getVelocity().getValueAsDouble();
+		double currentVelocity = this.Sweeper.getVelocity().getValueAsDouble();
 		return currentVelocity;
 	}
 
