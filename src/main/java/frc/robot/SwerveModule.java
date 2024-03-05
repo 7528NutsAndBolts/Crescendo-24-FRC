@@ -4,8 +4,10 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import frc.lib.math.Conversions;
-import frc.lib.util.CTREModuleState;
+// import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
 
 
@@ -27,8 +29,8 @@ public class SwerveModule {
     private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     /* driver motor control requests */
-    private final DutyCycleOut driveDutyCycle = new DutyCycleOut(1.0); //was 0
-    private final VelocityVoltage driveVelocity = new VelocityVoltage(4.5); //was 0
+    private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0); //was 1
+    private final VelocityVoltage driveVelocity = new VelocityVoltage(0); //was 4.5
 
     /* angle motor control requests */
     private final PositionVoltage anglePosition = new PositionVoltage(0); //was 0
@@ -58,7 +60,7 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
         /* This is a custom optimize function, since default WPILib optimize assumes continuous controller which CTRE and Rev onboard is not */
-        desiredState = CTREModuleState.optimize(desiredState, getState().angle); 
+        desiredState = SwerveModuleState.optimize(desiredState, getState().angle); 
         mAngleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
         setSpeed(desiredState, isOpenLoop);
     }
@@ -97,6 +99,23 @@ public class SwerveModule {
         return new SwerveModulePosition(
             Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.wheelCircumference), 
             Rotation2d.fromRotations(mAngleMotor.getPosition().getValue())
-        );
+      
+    
+            );
     }
-}
+
+     SwerveModuleState [] states = new SwerveModuleState[] {
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState(),
+        new SwerveModuleState()
+    };
+
+    StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
+
+    void periodic () {
+        publisher.set(states);
+    }
+
+
+    }

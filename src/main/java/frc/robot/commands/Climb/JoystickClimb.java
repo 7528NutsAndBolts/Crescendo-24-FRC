@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class JoystickClimb extends Command {
 
-	private int positionIncrement = 10000;
+	private int positionIncrement = 5;
 
 	public JoystickClimb() {
 		addRequirements(RobotContainer.climb);
@@ -23,7 +23,7 @@ public class JoystickClimb extends Command {
 		// joystick control
 		double climbSignal = -RobotContainer.climb.JoyStickClimb();
         
-		RobotContainer.climb.incrementTargetPosition((int) (climbSignal * positionIncrement));
+		RobotContainer.climb.incrementTargetPosition((double) (climbSignal * positionIncrement));
 
 		RobotContainer.climb.motionMagicControl();
 	}
