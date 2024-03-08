@@ -12,6 +12,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Score in Amp"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Test Path to Leave Starting Area 2.10"

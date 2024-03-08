@@ -1,15 +1,32 @@
 package frc.robot;
 
+import java.util.List;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Climb.GoToHomePosition;
-import frc.robot.commands.Climb.JoystickClimb;
-import frc.robot.commands.CommandGroups.GoToAmpCommandGroup;
-import frc.robot.commands.CommandGroups.StoreStateCommandGroup;
+// import frc.robot.commands.Climb.GoToHomePosition;
+// import frc.robot.commands.Climb.JoystickClimb;
+// import frc.robot.commands.CommandGroups.GoToAmpCommandGroup;
+// import frc.robot.commands.CommandGroups.StoreStateCommandGroup;
 import frc.robot.commands.Drivetrain.PIDTurnToAngle;
 // import frc.robot.commands.Climb.ClimbSticks;
 // import frc.robot.commands.Climb.GoToHomePosition;
@@ -17,17 +34,17 @@ import frc.robot.commands.Drivetrain.PIDTurnToAngle;
 // import frc.robot.commands.Drivetrain.PIDTurnToAngle;
 import frc.robot.commands.Drivetrain.TeleopSwerve;
 import frc.robot.commands.Intake.IntakeObject;
+import frc.robot.commands.Intake.OuttakeObject;
 import frc.robot.commands.Intake.StopIntake;
-import frc.robot.commands.Sweeper.UpSweeper;
-// import frc.robot.commands.Elevator.ReadyStateCommandGroup;
+// import frc.robot.commands.IntakeSupport.Source;
+// import frc.robot.commands.Sweeper.UpSweeper;
 import frc.robot.subsystems.*;
 // import frc.robot.auto.AutonomousSelector;
 // import frc.auto.AutonomousSelector;
 // import frc.robot.auto.DefaultAuto;
 import frc.robot.subsystems.Limelight.LimelightAmp;
 import frc.robot.subsystems.Limelight.LimelightSource;
-// import frc.robot.subsystems.Vision.VisionModule;
-// import frc.robot.subsystems.Vision.VisionPipelineRunnable;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,7 +54,7 @@ import frc.robot.subsystems.Limelight.LimelightSource;
  */
 public class RobotContainer {
     /* Autonomous Selector */
-    // private final AutonomousSelector autonomousSelector = new AutonomousSelector();
+    // private final SendableChooser<Command> autoChooser;
     
     /* Controllers */
     private final Joystick driver = new Joystick(1);
@@ -53,7 +70,7 @@ public class RobotContainer {
     private final Boolean robotCentric = false;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value);
+    public final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kBack.value);
     private final JoystickButton faceLeftButton = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton faceRightButton = new JoystickButton(driver, XboxController.Button.kB.value);
     private final JoystickButton faceRearButton = new JoystickButton(driver, XboxController.Button.kA.value);
@@ -63,24 +80,25 @@ public class RobotContainer {
     private final JoystickButton storeClimbStateButton = new JoystickButton(operator, XboxController.Button.kBack.value);
     // private final JoystickButton robotCentric = new JoystickButton(operator, XboxController.Button.kStart.value);
     private final JoystickButton runIntakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton ampButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    private final JoystickButton defaultPositionButton = new JoystickButton(operator, XboxController.Button.kStart.value);
+    // private final JoystickButton ampButton = new JoystickButton(operator, XboxController.Button.kA.value);
+    // private final JoystickButton defaultPositionButton = new JoystickButton(operator, XboxController.Button.kStart.value);
+    private final JoystickButton runOuttakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
-    public static Climb climb = new Climb();
+    private final Swerve swerve = new Swerve();
+    // public static Climb climb = new Climb();
     public static Intake intake = new Intake();
-    public static IntakeSupport intakesupport = new IntakeSupport();
-    public static Drake sweeper = new Drake();
+    // public static IntakeSupport intakesupport = new IntakeSupport();
+    // public static Drake sweeper = new Drake();
     public static LimelightAmp limelightamp = new LimelightAmp();
     public static LimelightSource limelightsource = new LimelightSource();
  
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
+        swerve.setDefaultCommand(
             new TeleopSwerve(
-                s_Swerve, 
+                swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
@@ -88,19 +106,19 @@ public class RobotContainer {
             )
         );
 
-        climb.setDefaultCommand(new JoystickClimb());
+        // climb.setDefaultCommand(new JoystickClimb());
 
-        intake.setDefaultCommand(new StopIntake());
+        // intake.setDefaultCommand(new StopIntake());
 
-        sweeper.setDefaultCommand(new UpSweeper());
+        // sweeper.setDefaultCommand(new UpSweeper());
    
+    //    NamedCommands.registerCommand("Score in Amp", new OuttakeObject());
 
         /* Configure the button bindings */
         configureButtonBindings();
 
-        // Thread visionThread = new Thread(new VisionPipelineRunnable(VisionModule.getInstance()), "visionThread");
-        // visionThread.setDaemon(true);
-        // visionThread.start();
+    //    autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+    //   SmartDashboard.putData("Auto Mode", autoChooser);
 
 
     }
@@ -112,13 +130,72 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
+        // SmartDashboard.putData("Test Auto", new PathPlannerAuto("Test Auto 2.10"));
         
+        // SmartDashboard.putData("Example Auto", new PathPlannerAuto("Example Auto"));
+
+        // // Add a button to run pathfinding commands to SmartDashboard
+        // SmartDashboard.putData("Pathfind to Pickup Pos", AutoBuilder.pathfindToPose(
+        //   new Pose2d(14.0, 6.5, Rotation2d.fromDegrees(0)), 
+        //   new PathConstraints(
+        //     4.0, 4.0, 
+        //     Units.degreesToRadians(360), Units.degreesToRadians(540)
+        //   ), 
+        //   0, 
+        //   2.0
+        // ));
+        // SmartDashboard.putData("Pathfind to Scoring Pos", AutoBuilder.pathfindToPose(
+        //   new Pose2d(2.15, 3.0, Rotation2d.fromDegrees(180)), 
+        //   new PathConstraints(
+        //     4.0, 4.0, 
+        //     Units.degreesToRadians(360), Units.degreesToRadians(540)
+        //   ), 
+        //   0, 
+        //   0
+        // ));
+
+    // an example that should prob be edited
+    // SmartDashboard.putData("Test Path to Score Amp 2.10", Commands.runOnce(() -> {
+    //     Pose2d currentPose = s_Swerve.getPose();
+
+    //     // the rotation component in these poses represents the direction of travel
+    //     Pose2d startPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
+    //     Pose2d endPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
+
+    //     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPos, endPos);
+    //     PathPlannerPath path = new PathPlannerPath (
+    //         bezierPoints,
+    //         new PathConstraints(4.0, 4.0,
+    //         Units.degreesToRadians(360), Units.degreesToRadians(540)), new GoalEndState(0.0, currentPose.getRotation()));
+        
+    //         AutoBuilder.followPath(path).schedule();
+    //      }));
+
+    // SmartDashboard.putData("Test Path to Leave Starting Area 2.10", Commands.runOnce(() -> {
+    //     Pose2d currentPose = s_Swerve.getPose();
+
+    //     // the rotation component in these poses represents the direction of travel
+    //     Pose2d startPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
+    //     Pose2d endPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
+
+    //     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPos, endPos);
+    //     PathPlannerPath path = new PathPlannerPath (
+    //         bezierPoints,
+    //         new PathConstraints(4.0, 4.0,
+    //         Units.degreesToRadians(360), Units.degreesToRadians(540)), new GoalEndState(0.0, currentPose.getRotation()));
+        
+    //         AutoBuilder.followPath(path).schedule();
+    //      }));
+    
+
+
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
 
 
         faceLeftButton.whileTrue(new PIDTurnToAngle(
-            s_Swerve, 
+            swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
@@ -126,7 +203,7 @@ public class RobotContainer {
             270));
 
         faceRightButton.whileTrue(new PIDTurnToAngle(
-            s_Swerve, 
+            swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
@@ -134,7 +211,7 @@ public class RobotContainer {
             90));
 
         faceFrontButton.whileTrue(new PIDTurnToAngle(
-            s_Swerve, 
+            swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
@@ -142,7 +219,7 @@ public class RobotContainer {
             180));
                 
         faceRearButton.whileTrue(new PIDTurnToAngle(
-            s_Swerve, 
+            swerve, 
             () -> -driver.getRawAxis(translationAxis), 
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
@@ -153,10 +230,12 @@ public class RobotContainer {
 
 
         /* Operator Buttons */
-        storeClimbStateButton.onTrue(new GoToHomePosition());
-        runIntakeButton.onTrue(new IntakeObject());
-        ampButton.onTrue(new GoToAmpCommandGroup());
-        defaultPositionButton.onTrue(new StoreStateCommandGroup());
+        // storeClimbStateButton.onTrue(new GoToHomePosition());
+        runIntakeButton.whileTrue(new IntakeObject());
+        // ampButton.onTrue(new GoToAmpCommandGroup());
+        // sourceButton.onTrue(new Source());
+        // defaultPositionButton.onTrue(new StoreStateCommandGroup());
+        runOuttakeButton.whileTrue(new OuttakeObject());
         
     }
 
@@ -176,16 +255,15 @@ public class RobotContainer {
     
     /* Passes Along Joystick Values for Elevator and Wrist */
     public double getOperatorLeftStickY() {
-        return stickDeadband(this.operator.getRawAxis(1), 0.05, 0.0);
+        return stickDeadband(this.operator.getRawAxis(1), 0.2, 0.0);
     }
  
     public double getOperatorRightStickY() {
-        return stickDeadband(this.operator.getRawAxis(5), 0.05, 0.0);
+        return stickDeadband(this.operator.getRawAxis(5), 0.2, 0.0);
     }
 
     /* Runs the Autonomous Selector*/
     // public Command getAutonomousCommand() {
-    //     return autonomousSelector.getCommand(swerve);
-    //     // return AutonomousSelector.getCommand(swerve);
+    //     return autoChooser.getSelected();
     // }
 }

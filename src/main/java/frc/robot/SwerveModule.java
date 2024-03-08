@@ -7,7 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import frc.lib.math.Conversions;
-// import frc.lib.util.CTREModuleState;
+import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
 
 
@@ -104,18 +104,18 @@ public class SwerveModule {
             );
     }
 
-     SwerveModuleState [] states = new SwerveModuleState[] {
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState()
-    };
+    //  SwerveModuleState [] states = new SwerveModuleState[] {
+    //     new SwerveModuleState(),
+    //     new SwerveModuleState(),
+    //     new SwerveModuleState(),
+    //     new SwerveModuleState()
+    // };
 
-    StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
+    // StructArrayPublisher<SwerveModuleState> publisher = NetworkTableInstance.getDefault().getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
-    void periodic () {
-        publisher.set(states);
-    }
+    // void periodic () {
+    //     publisher.set(states);
+    // }
 
 
     }

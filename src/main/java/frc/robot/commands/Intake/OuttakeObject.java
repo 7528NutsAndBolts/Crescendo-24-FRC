@@ -18,14 +18,14 @@ public class OuttakeObject extends Command {
     }
 
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     protected void end() {
-
+    RobotContainer.intake.stopIntake();
     }
     
     protected void interrupted() {
-
+        end();
     }
 }
