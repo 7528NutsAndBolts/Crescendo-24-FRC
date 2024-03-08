@@ -1,40 +1,40 @@
-package frc.robot.commands.Climb;
+// package frc.robot.commands.Climb;
 
-import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj2.command.Command;
+// import frc.robot.RobotContainer;
+// import edu.wpi.first.wpilibj2.command.Command;
 
-public class GoToHomePosition extends Command {
+// public class GoToHomePosition extends Command {
 
-	private double desiredPosition = RobotContainer.climb.getHomePosition();
+// 	private double desiredPosition = RobotContainer.climb.getHomePosition();
 
 
-	public GoToHomePosition() {
-		addRequirements(RobotContainer.climb);
-	}
+// 	public GoToHomePosition() {
+// 		addRequirements(RobotContainer.climb);
+// 	}
 
-	// Called just before this Command runs the first time
-	public void initialize() {
-		RobotContainer.climb.setTargetPosition(desiredPosition);
-	}
+// 	// Called just before this Command runs the first time
+// 	public void initialize() {
+// 		RobotContainer.climb.setTargetPosition(desiredPosition);
+// 	}
 
-	// Called repeatedly when this Command is scheduled to run
-	public void execute() {
-		RobotContainer.climb.motionMagicControl();
-	}
+// 	// Called repeatedly when this Command is scheduled to run
+// 	public void execute() {
+// 		RobotContainer.climb.motionMagicControl();
+// 	}
 
-	// Make this return true when this Command no longer needs to run execute()
-	public boolean isFinished() {
-		return RobotContainer.climb.isInPosition(desiredPosition);
-	}
+// 	// Make this return true when this Command no longer needs to run execute()
+// 	public boolean isFinished() {
+// 		return RobotContainer.climb.isInPosition(desiredPosition);
+// 	}
 
-	// Called once after isFinished returns true
-	protected void end() {
+// 	// Called once after isFinished returns true
+// 	protected void end() {
 
-	}
+// 	}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	protected void interrupted() {
+// 	// Called when another command which requires one or more of the same
+// 	// subsystems is scheduled to run
+// 	protected void interrupted() {
 
-	}
-}
+// 	}
+// }

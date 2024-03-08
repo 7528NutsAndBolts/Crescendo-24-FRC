@@ -43,7 +43,7 @@ public static final class MK4i {
 
         double angleKP = 25.0;
         double angleKI = 7.0;
-        double angleKD = 1.5;
+        double angleKD = 2.5;
 
         InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
         InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;

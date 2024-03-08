@@ -10,6 +10,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 // import com.ctre.phoenix.*;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 
 // import com.pathplanner.lib.path.PathPlannerTrajectory;
@@ -25,6 +27,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 // import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,7 +42,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-    
+    private Field2d field = new Field2d();
 
     // private PIDController m_balancePID = new PIDController(0.08, 0.0, 0.0);
     // public static final double BALANCE_TOLERANCE = 12;
@@ -46,8 +50,8 @@ public class Swerve extends SubsystemBase {
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
-        gyro.setYaw(0);
-        // zeroGyro();
+        gyro.setYaw(0); // changed this from 0 to 180 so BE CAREFUL OMGGGOMGOGMG
+        zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.FrontLeft.constants),
@@ -66,6 +70,37 @@ public class Swerve extends SubsystemBase {
 
         // int startingAprilTag = (int) SmartDashboard.getNumber("Starting April Tag ID", 1);
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+
+         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+
+    //     AutoBuilder.configureHolonomic( //TODO seems a bit weird, might wanna slash out the stuff if this dont work :(
+    //   this::getPose, 
+    //   this::setPose, 
+    //   this::getSpeeds, 
+    //   this::driveRobotRelative, 
+    //   Constants.Swerve.pathFollowerConfig,
+    //   () -> {
+    //       // Boolean supplier that controls when the path will be mirrored for the red alliance
+    //       // This will flip the path being followed to the red side of the field.
+    //       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+    //       var alliance = DriverStation.getAlliance();
+    //       if (alliance.isPresent()) {
+    //           return alliance.get() == DriverStation.Alliance.Red;
+    //       }
+    //       return false;
+    //   },
+    //   this
+    // );
+
+    // Set up custom logging to add the current path to a field 2d widget
+    // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+
+
+    //      SmartDashboard.putData("Field", field);
+
+
+
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -98,9 +133,7 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    // public Pose2d getPose() {
-    //     return swerveOdometry.getPoseMeters();
-    // }
+
 
     // public void resetOdometry(Pose2d pose) {
     //     swerveOdometry.resetPosition(getYaw(), getModulePositions(), pose);
@@ -147,9 +180,24 @@ public class Swerve extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
-    // public void zeroGyro() {
-    //     gyro.setYaw(0);
-    // }
+    // public ChassisSpeeds getSpeeds() {
+    //     return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
+    //   }
+
+    //   public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+    //     driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
+    //   }
+
+    //   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    //     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+
+    //     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+    //     setModuleStates(targetStates);
+    //   }
+    
+    public void zeroGyro() {
+        gyro.setYaw(0);
+    }
 
     // public void autozeroGyro() {
     //     gyro.setYaw(180); //for autozero, robot is flipped but still field-oriented
@@ -164,17 +212,6 @@ public class Swerve extends SubsystemBase {
     //     return gyro.getRoll();
     // }
 
-    // public void AutoBalance(){
-    //     m_balancePID.setTolerance(BALANCE_TOLERANCE);
-    //     double pidOutput = MathUtil.clamp(m_balancePID.calculate(getRoll(), 0), -0.5, 0.5);
-    //     SmartDashboard.putNumber("Balance PID", pidOutput);
-    //     drive(new Translation2d(pidOutput, 0), 0.0, true, true);
-    // }
-
-    // public boolean isRobotBalanced(){
-    //     return m_balancePID.atSetpoint();
-    // }
-
 
     public void resetModulesToAbsolute() {
         for (SwerveModule mod : mSwerveMods) {
@@ -185,39 +222,6 @@ public class Swerve extends SubsystemBase {
     // public void stopDrive(){
     //     drive(new Translation2d(0, 0), 0, true, true);
     // }
-
-    // public SequentialCommandGroup followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-    //     PIDController thetaController = new PIDController(3, 0, 0);
-    //     PIDController xController = new PIDController(3, 0, 0);
-    //     PIDController yController = new PIDController(3, 0, 0);
-    //     thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    //     return new SequentialCommandGroup(
-    //         new InstantCommand( () -> {
-    //             if(isFirstPath){
-    //                 resetOdometry(PathPlannerTrajectory.transformTrajectoryForAlliance(traj, DriverStation.getAlliance()).getInitialHolonomicPose());
-                
-    //             }
-    //         }),
-    //         new PPSwerveControllerCommand(
-    //             traj,
-    //             this::getPose,
-    //             Constants.Swerve.swerveKinematics,
-    //             xController,
-    //             yController,
-    //             thetaController,
-    //             this::setModuleStates,
-    //             true,
-    //             this
-    //         )
-    //         .andThen(() -> stopDrive())
-    //         );
-        
-    // }
-
-    
-
-        
 
     @Override
     public void periodic() {

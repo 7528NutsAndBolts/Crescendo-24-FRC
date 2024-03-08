@@ -16,13 +16,16 @@ public class PIDTurnToAngle extends Command {
     private Swerve s_Swerve;    
     private DoubleSupplier translationSup;
     private DoubleSupplier strafeSup;
+    // private DoubleSupplier rotationSup;
+    // private Boolean robotCentricSup;
+
     public double rotationVal = 0;
 
     public double targetAngle = 0;
     public double currentAngle = 0;
     public double acceptableError = 0;
 
-    private final PIDController angleController = new PIDController(0, 0, 0); //ki used to be 0
+    private final PIDController angleController = new PIDController(0.012, 0, 0); //ki used to be 0
 
     public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, double targetAngle) {
         this.s_Swerve = s_Swerve;
@@ -30,17 +33,19 @@ public class PIDTurnToAngle extends Command {
 
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
+        // this.rotationSup = rotationSup;
+        // this.robotCentricSup = robotCentricSup;
         this.targetAngle = targetAngle;
         angleController.enableContinuousInput(0, 360);
     }
 
     public void initialize() {
-        angleController.setTolerance(1); //used to be 5
+        angleController.setTolerance(0); //used to be 5
     }
 
     @Override
     public void execute() {
-        currentAngle = s_Swerve.getGyroYaw().getDegrees() + 180;
+        currentAngle = s_Swerve.getGyroYaw().getDegrees() + 180; //+ 180
         rotationVal = angleController.calculate(currentAngle, targetAngle);
         
         /* Get Values, Deadband*/
@@ -63,6 +68,7 @@ public class PIDTurnToAngle extends Command {
     }
 
     protected void end() {
+        //might wanna remove this testetsetset
         
     }
 

@@ -62,9 +62,9 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    RobotContainer.climb.updateDashboard();
-    RobotContainer.intakesupport.updateDashboard();
-    RobotContainer.sweeper.updateDashboard();
+    // RobotContainer.climb.updateDashboard();
+    // RobotContainer.intakesupport.updateDashboard();
+    // RobotContainer.sweeper.updateDashboard();
     RobotContainer.limelightamp.updateDashboard();
     RobotContainer.limelightsource.updateDashboard();
   }
@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_autonomousCommand = robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
