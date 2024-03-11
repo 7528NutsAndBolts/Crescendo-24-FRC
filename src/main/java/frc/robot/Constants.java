@@ -34,6 +34,12 @@ public final class Constants {
 
     public static final class Swerve {
 
+         public static final Translation2d flModuleOffset = new Translation2d(0.47, 0.47);
+         public static final Translation2d frModuleOffset = new Translation2d(0.47, -0.47);
+         public static final Translation2d blModuleOffset = new Translation2d(-0.47, 0.47);
+         public static final Translation2d brModuleOffset = new Translation2d(-0.47, -0.47);
+
+
         
         public static final int pigeonID = 0;
         // public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
@@ -42,8 +48,8 @@ public final class Constants {
             COTSFalconSwerveConstants.MK4i.KrakenX60(COTSFalconSwerveConstants.MK4i.driveRatios.SDSMK4i_L1);
 
         /* Drivetrain Constants */
-        public static final double trackWidth = Units.inchesToMeters(24); 
-        public static final double wheelBase = Units.inchesToMeters(24); 
+        public static final double trackWidth = Units.inchesToMeters(25); 
+        public static final double wheelBase = Units.inchesToMeters(25); 
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         /* Swerve Kinematics 
@@ -97,9 +103,10 @@ public final class Constants {
         
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = 0.32; //TODO used to be divded by 12
-        public static final double driveKV = 1.51;
-        public static final double driveKA = 0.27;
+        public static final double driveKS = 0.32;
+        public static final double driveKV = 1.51; 
+        public static final double driveKA = 0.27; 
+        
 
         /* Swerve Profiling Values */
         /** Meters per Second */
@@ -152,14 +159,13 @@ public final class Constants {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
-        //  public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
-        //         new PIDConstants(6.0, 0, 0), // Translation PID
-        //         new PIDConstants(25.0, 7.0, 1.5), // Rotation PID
-        //         4, // Max Speed Meters per second
-        //         Math.sqrt(Swerve.trackWidth * Swerve.trackWidth +
-        //                 Swerve.wheelBase * Swerve.wheelBase) / 2, // Drive base radius in meters. Distance from robot center to furthest module.
-        //         new ReplanningConfig()
-        // );
+         public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
+                new PIDConstants(0.5, 0, 0), // Translation PID
+                new PIDConstants(25.0, 7.0, 1.5), // Rotation PID
+                maxSpeed,
+                flModuleOffset.getNorm(),
+                 new ReplanningConfig()
+        );
 
     }
 

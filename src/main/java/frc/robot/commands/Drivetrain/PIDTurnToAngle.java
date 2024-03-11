@@ -25,7 +25,7 @@ public class PIDTurnToAngle extends Command {
     public double currentAngle = 0;
     public double acceptableError = 0;
 
-    private final PIDController angleController = new PIDController(0.012, 0, 0); //ki used to be 0
+    private final PIDController angleController = new PIDController(0.012, 0, 0.01); //kd used to be 0
 
     public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, double targetAngle) {
         this.s_Swerve = s_Swerve;

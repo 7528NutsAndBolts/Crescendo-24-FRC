@@ -54,7 +54,7 @@ import frc.robot.subsystems.Limelight.LimelightSource;
  */
 public class RobotContainer {
     /* Autonomous Selector */
-    // private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
     
     /* Controllers */
     private final Joystick driver = new Joystick(1);
@@ -83,6 +83,7 @@ public class RobotContainer {
     // private final JoystickButton ampButton = new JoystickButton(operator, XboxController.Button.kA.value);
     // private final JoystickButton defaultPositionButton = new JoystickButton(operator, XboxController.Button.kStart.value);
     private final JoystickButton runOuttakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+    private final JoystickButton runStopIntakeButton = new JoystickButton(operator, XboxController.Button.kX.value);
 
     /* Subsystems */
     private final Swerve swerve = new Swerve();
@@ -112,13 +113,13 @@ public class RobotContainer {
 
         // sweeper.setDefaultCommand(new UpSweeper());
    
-    //    NamedCommands.registerCommand("Score in Amp", new OuttakeObject());
+       NamedCommands.registerCommand("Score in Amp", new OuttakeObject());
 
         /* Configure the button bindings */
         configureButtonBindings();
 
-    //    autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
-    //   SmartDashboard.putData("Auto Mode", autoChooser);
+       autoChooser = AutoBuilder.buildAutoChooser(); // Default auto will be `Commands.none()`
+      SmartDashboard.putData("Auto Mode", autoChooser);
 
 
     }
@@ -131,63 +132,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        // SmartDashboard.putData("Test Auto", new PathPlannerAuto("Test Auto 2.10"));
-        
-        // SmartDashboard.putData("Example Auto", new PathPlannerAuto("Example Auto"));
-
-        // // Add a button to run pathfinding commands to SmartDashboard
-        // SmartDashboard.putData("Pathfind to Pickup Pos", AutoBuilder.pathfindToPose(
-        //   new Pose2d(14.0, 6.5, Rotation2d.fromDegrees(0)), 
-        //   new PathConstraints(
-        //     4.0, 4.0, 
-        //     Units.degreesToRadians(360), Units.degreesToRadians(540)
-        //   ), 
-        //   0, 
-        //   2.0
-        // ));
-        // SmartDashboard.putData("Pathfind to Scoring Pos", AutoBuilder.pathfindToPose(
-        //   new Pose2d(2.15, 3.0, Rotation2d.fromDegrees(180)), 
-        //   new PathConstraints(
-        //     4.0, 4.0, 
-        //     Units.degreesToRadians(360), Units.degreesToRadians(540)
-        //   ), 
-        //   0, 
-        //   0
-        // ));
-
-    // an example that should prob be edited
-    // SmartDashboard.putData("Test Path to Score Amp 2.10", Commands.runOnce(() -> {
-    //     Pose2d currentPose = s_Swerve.getPose();
-
-    //     // the rotation component in these poses represents the direction of travel
-    //     Pose2d startPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
-    //     Pose2d endPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
-
-    //     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPos, endPos);
-    //     PathPlannerPath path = new PathPlannerPath (
-    //         bezierPoints,
-    //         new PathConstraints(4.0, 4.0,
-    //         Units.degreesToRadians(360), Units.degreesToRadians(540)), new GoalEndState(0.0, currentPose.getRotation()));
-        
-    //         AutoBuilder.followPath(path).schedule();
-    //      }));
-
-    // SmartDashboard.putData("Test Path to Leave Starting Area 2.10", Commands.runOnce(() -> {
-    //     Pose2d currentPose = s_Swerve.getPose();
-
-    //     // the rotation component in these poses represents the direction of travel
-    //     Pose2d startPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
-    //     Pose2d endPos = new Pose2d(currentPose.getTranslation(), new Rotation2d());
-
-    //     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startPos, endPos);
-    //     PathPlannerPath path = new PathPlannerPath (
-    //         bezierPoints,
-    //         new PathConstraints(4.0, 4.0,
-    //         Units.degreesToRadians(360), Units.degreesToRadians(540)), new GoalEndState(0.0, currentPose.getRotation()));
-        
-    //         AutoBuilder.followPath(path).schedule();
-    //      }));
-    
+        SmartDashboard.putData("Test Auto 2.10", new PathPlannerAuto("Test Auto 2.10"));
 
 
         /* Driver Buttons */
@@ -232,10 +177,13 @@ public class RobotContainer {
         /* Operator Buttons */
         // storeClimbStateButton.onTrue(new GoToHomePosition());
         runIntakeButton.whileTrue(new IntakeObject());
+        runIntakeButton.whileFalse(new StopIntake());
         // ampButton.onTrue(new GoToAmpCommandGroup());
         // sourceButton.onTrue(new Source());
         // defaultPositionButton.onTrue(new StoreStateCommandGroup());
         runOuttakeButton.whileTrue(new OuttakeObject());
+        runOuttakeButton.whileFalse(new StopIntake());
+        
         
     }
 
@@ -263,7 +211,7 @@ public class RobotContainer {
     }
 
     /* Runs the Autonomous Selector*/
-    // public Command getAutonomousCommand() {
-    //     return autoChooser.getSelected();
-    // }
+    public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
+    }
 }

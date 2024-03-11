@@ -14,7 +14,7 @@ public class StopIntake extends Command {
     }
 
     public void execute() {
-    RobotContainer.intake.hold();
+        RobotContainer.intake.hold();
     }
 
     public boolean isFinished() {
