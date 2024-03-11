@@ -18,6 +18,7 @@ public class OuttakeObject extends Command {
     }
 
     public boolean isFinished() {
+        // end();
         return true;
     }
 

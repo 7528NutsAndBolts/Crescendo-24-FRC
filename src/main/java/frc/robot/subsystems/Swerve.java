@@ -41,11 +41,9 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+    private SwerveDriveKinematics kinematics = Constants.Swerve.swerveKinematics;
 
     private Field2d field = new Field2d();
-
-    // private PIDController m_balancePID = new PIDController(0.08, 0.0, 0.0);
-    // public static final double BALANCE_TOLERANCE = 12;
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
@@ -69,35 +67,37 @@ public class Swerve extends SubsystemBase {
         // resetModulesToAbsolute();
 
         // int startingAprilTag = (int) SmartDashboard.getNumber("Starting April Tag ID", 1);
+      // used to be "\\\\" here
+
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
          PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
 
-    //     AutoBuilder.configureHolonomic( //TODO seems a bit weird, might wanna slash out the stuff if this dont work :(
-    //   this::getPose, 
-    //   this::setPose, 
-    //   this::getSpeeds, 
-    //   this::driveRobotRelative, 
-    //   Constants.Swerve.pathFollowerConfig,
-    //   () -> {
-    //       // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //       // This will flip the path being followed to the red side of the field.
-    //       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        AutoBuilder.configureHolonomic( //TODO seems a bit weird, might wanna slash out the stuff if this dont work :(
+      this::getPose, 
+      this::setPose, 
+      this::getSpeeds, 
+      this::driveRobotRelative, 
+      Constants.Swerve.pathFollowerConfig,
+      () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //       var alliance = DriverStation.getAlliance();
-    //       if (alliance.isPresent()) {
-    //           return alliance.get() == DriverStation.Alliance.Red;
-    //       }
-    //       return false;
-    //   },
-    //   this
-    // );
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+      },
+      this
+    );
 
     // Set up custom logging to add the current path to a field 2d widget
-    // PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+    PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
 
 
-    //      SmartDashboard.putData("Field", field);
+         SmartDashboard.putData("Field", field);
 
 
 
@@ -180,20 +180,20 @@ public class Swerve extends SubsystemBase {
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
-    // public ChassisSpeeds getSpeeds() {
-    //     return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
-    //   }
+    public ChassisSpeeds getSpeeds() {
+        return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
+      }
 
-    //   public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
-    //     driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
-    //   }
+      public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+        driveRobotRelative(ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getPose().getRotation()));
+      }
 
-    //   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
-    //     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+      public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+        ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
 
-    //     SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
-    //     setModuleStates(targetStates);
-    //   }
+        SwerveModuleState[] targetStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(targetSpeeds);
+        setModuleStates(targetStates);
+      }
     
     public void zeroGyro() {
         gyro.setYaw(0);

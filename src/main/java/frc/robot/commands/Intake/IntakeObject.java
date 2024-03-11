@@ -19,6 +19,7 @@ public class IntakeObject extends Command {
     }
 
     public boolean isFinished() {
+        // end();
         return true;
     }
 

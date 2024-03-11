@@ -8,8 +8,9 @@
 
 
  public final class Intake extends SubsystemBase {
-     // value grabbed from previous season
-     private final double intake_speed = 0.3;
+     // values adjusted dont change w out intention
+     private final double intake_speed = 0.2;
+     private final double outtake_speed = 0.7; 
      public TalonFXConfiguration intakeConfiguration = new TalonFXConfiguration();
 
      private final TalonFX intakeMotor1 = new TalonFX(10);
@@ -53,13 +54,13 @@
      }
 
      public void outtake() {
-        //   intakeMotor1.set(-intake_speed);
-         intakeMotor2.set(-0.35);
+        // intakeMotor1.set(-outtake_speed);
+        intakeMotor2.set(outtake_speed);
      }
 
      public void hold() {
-         intakeMotor1.set(0);
-         intakeMotor2.set(0);
+        intakeMotor1.set(0);
+        intakeMotor2.set(0);
 
      }
 
