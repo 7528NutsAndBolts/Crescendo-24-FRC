@@ -6,6 +6,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Zero Gyro"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Test Path to Score Amp 2.10"

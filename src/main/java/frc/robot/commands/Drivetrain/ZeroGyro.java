@@ -1,29 +1,29 @@
-package frc.robot.commands.Intake;
+package frc.robot.commands.Drivetrain;
 
-import frc.robot.RobotContainer;
+import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class IntakeObject extends Command {
+public class ZeroGyro extends Command {
 
-    public IntakeObject() {
-        addRequirements(RobotContainer.intake);
+    private Swerve swerve;
+
+    public ZeroGyro() {
+       addRequirements(swerve);
     }
 
     public void initialize() {
-
+        swerve.zeroGyro();
     }
 
     public void execute() {
-    RobotContainer.intake.intake();
+    
     }
 
     public boolean isFinished() {
-        // end();
         return true;
     }
 
     protected void end() {
-        RobotContainer.intake.stopIntake();
     }
     
     protected void interrupted() {
