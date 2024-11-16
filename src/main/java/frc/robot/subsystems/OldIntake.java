@@ -9,9 +9,9 @@
 
  public final class OldIntake extends SubsystemBase {
      // values adjusted dont change w out intention
-     private final double intake_speed = 0.2;
-     private final double outtake_speed = 0.1; //.7025, .69, .6, 0.5, 0.1 works muy well
-     private final double full_speed = 0.15;
+     private final double intake_speed = 0.25;
+     private final double outtake_speed = 0.09; //.7025, .69, .6, 0.5, 0.1 works muy well
+     private final double full_speed = 0.35;
      private final double hola = 0.05;
      private final double adios = 0.2;
      private final double centre = 0.15;
