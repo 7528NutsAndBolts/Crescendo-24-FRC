@@ -23,6 +23,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -34,10 +35,10 @@ public final class Constants {
 
     public static final class Swerve {
 
-         public static final Translation2d flModuleOffset = new Translation2d(0.47, 0.47);
-         public static final Translation2d frModuleOffset = new Translation2d(0.47, -0.47);
-         public static final Translation2d blModuleOffset = new Translation2d(-0.47, 0.47);
-         public static final Translation2d brModuleOffset = new Translation2d(-0.47, -0.47);
+         public static final Translation2d flModuleOffset = new Translation2d(0.4, 0.4); //used to be 0.47
+         public static final Translation2d frModuleOffset = new Translation2d(0.4, -0.4);
+         public static final Translation2d blModuleOffset = new Translation2d(-0.4, 0.4);
+         public static final Translation2d brModuleOffset = new Translation2d(-0.4, -0.4);
 
 
         
@@ -72,15 +73,17 @@ public final class Constants {
         public static final  SensorDirectionValue cancoderInvert = chosenModule.canCoderInvert;
 
         /* Swerve Current Limiting */
-        public static final int angleCurrentLimit = 25; //20
-        public static final int angleCurrentThreshold = 40;
+        public static final int angleCurrentLimit = 35; //20
+        public static final int angleCurrentThreshold = 55;
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35; //30
-        public static final int driveCurrentThreshold = 60;
+        public static final int driveCurrentLimit = 35; //35
+        public static final int driveCurrentThreshold = 55; //60
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
+        
+        
 
 
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
@@ -102,74 +105,76 @@ public final class Constants {
 
         
         /* Drive Motor Characterization Values */
-        public static final double driveKS = 0.32;
-        public static final double driveKV = 1.51; //1.51, 1.61, 3.61
+        public static final double driveKS = 0.32; //.32, .55, .65, .95
+        public static final double driveKV = 1.51; //1.51, 3.51
         public static final double driveKA = 0.27; 
         
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5;        /** Radians per Second */
-        public static final double maxAngularVelocity = 3.0;
+        public static final double maxSpeed = 2.0;  //6.0 
+         /** Radians per Second */
+        public static final double maxAngularVelocity = 2.5;  //3.0
 
 
         /* Neutral Modes */
-        public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
+        public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Brake;
         public static final NeutralModeValue driveNeutralMode = NeutralModeValue.Brake;
      
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class FrontLeft { 
-            public static final int driveMotorID = 5; //d5
-            public static final int angleMotorID = 4; //t4
-            public static final int canCoderID = 1; 
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-255.0586);//65.83, 61.76
+            public static final int driveMotorID = 18; //d5
+            public static final int angleMotorID = 15; //t4
+            public static final int canCoderID = 3; 
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-9.580078125);//65.83, 61.76, 107.9296 106.2595
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
-
         /* Front Right Module - Module 1 */
         public static final class FrontRight { 
-            public static final int driveMotorID = 1; //d1 --> d8
-            public static final int angleMotorID = 8; //t8 --> t1
-            public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-280.0195);//265.34//-14.94, 341.91
+            public static final int driveMotorID = 19; //d1 --> d8
+            public static final int angleMotorID = 0; //t8 --> t1
+            public static final int canCoderID = 0;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-48.4277444);//265.34//-14.94, 341.91, 81.6504
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
         
         /* Back Left Module - Module 2 */
         public static final class RearLeft { 
-            public static final int driveMotorID = 3; //d3
-            public static final int angleMotorID = 6; //t6
-            public static final int canCoderID = 0; 
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-231.416);//2.19//59.77//180, 59.62
+            public static final int driveMotorID = 16; //d3
+            public static final int angleMotorID = 20; //t6
+            public static final int canCoderID = 1; 
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(19.160156);//2.19//59.77//180, 59.62
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
         public static final class RearRight { 
-            public static final int driveMotorID = 7; 
-            public static final int angleMotorID = 2; 
+            public static final int driveMotorID = 17; 
+            public static final int angleMotorID = 14; 
             public static final int canCoderID = 2; 
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-130.0977);//166.20//183.03//-1.32, 180
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-11.25);//166.20//183.03//-1.32, 180 -8.4375 0.087890625
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
          public static final HolonomicPathFollowerConfig pathFollowerConfig = new HolonomicPathFollowerConfig(
                 new PIDConstants(0.5, 0, 0), // Translation PID
-                new PIDConstants(25.0, 7.0, 1.5), // Rotation PID
+                new PIDConstants(10, 0, 0), // Rotation PID 25, 7, 3.5 doesn't work, og 10 0 0
                 maxSpeed,
                 flModuleOffset.getNorm(),
                  new ReplanningConfig()
         );
 
+        
+
     }
 
     public static final class AutoConstants { 
-        public static final double kMaxSpeedMetersPerSecond = 3; //1.5 orignally
+        public static final double kMaxSpeedMetersPerSecond = 4.5; //1.5 orignally
         public static final double kMaxAccelerationMetersPerSecondSquared = 3; //2 originally
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
@@ -184,6 +189,12 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class LimelightConstants {
+        public static final double m_limelightMountAngleDegree = 50.25;
+        public static final double m_limelightLensHeightInches = 10;
+        public static final double m_limelightToFrontOfRobot = 0;
+      }
 
     public interface PhotonVision {
 
@@ -207,8 +218,6 @@ public final class Constants {
         Matrix<N3, N1> singleTagStdDevs = VecBuilder.fill(4d, 4d, 8d);
         Matrix<N3, N1> multiTagStdDevs = VecBuilder.fill(0.5d, 0.5d, 1d);
     }
-    
-
    
     
 

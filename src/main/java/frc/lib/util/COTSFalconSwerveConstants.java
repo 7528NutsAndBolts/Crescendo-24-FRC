@@ -41,7 +41,7 @@ public static final class MK4i {
         /** (150 / 7) : 1 */
         double angleGearRatio = ((150.0 / 7.0) / 1.0);
 
-        double angleKP = 25.0;
+        double angleKP = 100.0;
         double angleKI = 7.0;
         double angleKD = 3.5; //2.5
 

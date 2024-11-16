@@ -9,26 +9,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 // import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.auto.AutoZero;
+// import frc.robot.auto.AutoZeroReverse;
 import frc.robot.auto.AutonomousSelector;
+// import frc.robot.commands.Climb.ClimbPosition;
 // import frc.robot.commands.Climb.GoToHomePosition;
 // import frc.robot.commands.Climb.JoystickClimb;
-// import frc.robot.commands.CommandGroups.GoToAmpCommandGroup;
-// import frc.robot.commands.CommandGroups.StoreStateCommandGroup;
 import frc.robot.commands.Drivetrain.PIDTurnToAngle;
-// import frc.robot.commands.Climb.ClimbSticks;
-// import frc.robot.commands.Climb.GoToHomePosition;
-// import frc.robot.commands.Climb.JoystickClimb;
-// import frc.robot.commands.Drivetrain.PIDTurnToAngle;
 import frc.robot.commands.Drivetrain.TeleopSwerve;
+import frc.robot.commands.Intake.Adios;
+import frc.robot.commands.Intake.Centre;
+import frc.robot.commands.Intake.FullObject;
+import frc.robot.commands.Intake.Hola;
 import frc.robot.commands.Intake.IntakeObject;
 import frc.robot.commands.Intake.OuttakeObject;
 import frc.robot.commands.Intake.StopIntake;
-// import frc.robot.commands.IntakeSupport.Source;
-// import frc.robot.commands.Sweeper.UpSweeper;
+// import frc.robot.subsystems.Climb;
+
+// import frc.robot.commands.Climb.ClimbPosition;
+
 import frc.robot.subsystems.*;
-// import frc.robot.auto.AutonomousSelector;
-// import frc.auto.AutonomousSelector;
-// import frc.robot.auto.DefaultAuto;
 import frc.robot.subsystems.Limelight.LimelightAmp;
 import frc.robot.subsystems.Limelight.LimelightSource;
 
@@ -43,7 +43,7 @@ public class RobotContainer {
     /* Autonomous Selector */
     private final AutonomousSelector autonomousSelector = new AutonomousSelector();
     
-    /* Controllers */
+    /* Contr ollers */
     private final Joystick driver = new Joystick(1);
     private final Joystick operator = new Joystick(2);
 
@@ -64,18 +64,18 @@ public class RobotContainer {
     private final JoystickButton faceFrontButton = new JoystickButton(driver, XboxController.Button.kY.value);
 
     /* Operator Buttons */
-    // private final JoystickButton storeClimbStateButton = new JoystickButton(operator, XboxController.Button.kBack.value);
-    // private final JoystickButton robotCentric = new JoystickButton(operator, XboxController.Button.kStart.value);
-    private final JoystickButton runIntakeButton = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    // private final JoystickButton ampButton = new JoystickButton(operator, XboxController.Button.kA.value);
-    // private final JoystickButton defaultPositionButton = new JoystickButton(operator, XboxController.Button.kStart.value);
-    private final JoystickButton runOuttakeButton = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-    // private final JoystickButton runStopIntakeButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    // private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton holaButton = new JoystickButton(operator, XboxController.Button.kA.value);
+    private final JoystickButton adiosButton = new JoystickButton(operator, XboxController.Button.kY.value);
+    private final JoystickButton runIntakeButton = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton runOuttakeButton = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton runFullOutakeSpeedButton = new JoystickButton(operator, XboxController.Button.kX.value);
+    private final JoystickButton centreButton = new JoystickButton(operator, XboxController.Button.kB.value);
 
     /* Subsystems */
     private final Swerve swerve = new Swerve();
-    // public static Climb climb = new Climb();
-    public static Intake intake = new Intake();
+    ///public static Climb climb = new Climb();
+    public static OldIntake intake = new OldIntake();
     // public static IntakeSupport intakesupport = new IntakeSupport();
     // public static Drake sweeper = new Drake();
     public static LimelightAmp limelightamp = new LimelightAmp();
@@ -94,14 +94,17 @@ public class RobotContainer {
             )
         );
 
+
         // climb.setDefaultCommand(new JoystickClimb());
 
         // intake.setDefaultCommand(new StopIntake());
 
         // sweeper.setDefaultCommand(new UpSweeper());
    
-       NamedCommands.registerCommand("Score in Amp", new OuttakeObject());
-    //    NamedCommands.registerCommand("Zero Gyro", new ZeroGyro());
+       NamedCommands.registerCommand("Score in Amp", new FullObject());
+       NamedCommands.registerCommand("Stop Intake", new StopIntake());
+       NamedCommands.registerCommand("Auto Zero", new AutoZero(swerve));
+    //    NamedCommands.registerCommand("Auto Zero Reverse", new AutoZeroReverse(swerve));
 
         /* Configure the button bindings */
         configureButtonBindings();
@@ -123,30 +126,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        // SmartDashboard.putData("Test Auto 2.10", new PathPlannerAuto("Test Auto 2.10"));
-
-    //        SmartDashboard.putData("Pathfind to Score in Amp", AutoBuilder.pathfindToPose(
-    //   new Pose2d(0.77, 6.90, Rotation2d.fromDegrees(0)), 
-    //   new PathConstraints(
-    //     3.0, 3.0, 
-    //     Units.degreesToRadians(540), Units.degreesToRadians(720)
-    //   ), 
-    //   0, 
-    //   2.0
-    // ));
-    // SmartDashboard.putData("Pathfind to Leave Starting Area", AutoBuilder.pathfindToPose(
-    //   new Pose2d(1.84, 7.62, Rotation2d.fromDegrees(0)), 
-    //   new PathConstraints(
-    //     3.0, 3.0, 
-    //     Units.degreesToRadians(540), Units.degreesToRadians(720)
-    //   ), 
-    //   0, 
-    //   0
-    // ));
-
+        // climb.setDefaultCommand(new JoystickClimb());
 
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroGyro()));
+        zeroGyro.onTrue(new InstantCommand(() -> swerve.zeroHeading()));
 
 
         faceLeftButton.whileTrue(new PIDTurnToAngle(
@@ -171,7 +154,7 @@ public class RobotContainer {
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
             robotCentric,
-            180));
+        180));
                 
         faceRearButton.whileTrue(new PIDTurnToAngle(
             swerve, 
@@ -179,21 +162,36 @@ public class RobotContainer {
             () -> -driver.getRawAxis(strafeAxis), 
             () -> -driver.getRawAxis(rotationAxis), 
             robotCentric,
-            360));
+            0));
         
 
 
 
         /* Operator Buttons */
-        // storeClimbStateButton.onTrue(new GoToHomePosition());
+        // storeClimbStateButton.onTrue(new GoToHomePosition());'
+
+        //Climb buttons
+        // climbButton.whileTrue(new ClimbPosition());
+        // climbButton.whileFalse(new GoToHomePosition());
+
         runIntakeButton.whileTrue(new IntakeObject());
         runIntakeButton.whileFalse(new StopIntake());
-        // ampButton.onTrue(new GoToAmpCommandGroup());
-        // sourceButton.onTrue(new Source());
+
         // defaultPositionButton.onTrue(new StoreStateCommandGroup());
         runOuttakeButton.whileTrue(new OuttakeObject());
         runOuttakeButton.whileFalse(new StopIntake());
-        
+
+        runFullOutakeSpeedButton.whileTrue(new FullObject());
+        runFullOutakeSpeedButton.whileFalse(new StopIntake());
+
+        holaButton.whileTrue(new Hola());
+        holaButton.whileFalse(new StopIntake());
+
+        adiosButton.whileTrue(new Adios());
+        adiosButton.whileFalse(new StopIntake());
+
+        centreButton.whileTrue(new Centre());
+        centreButton.whileFalse(new StopIntake());
         
     }
 

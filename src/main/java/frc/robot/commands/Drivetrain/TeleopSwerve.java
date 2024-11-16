@@ -7,6 +7,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
@@ -38,6 +39,7 @@ public class TeleopSwerve extends Command {
         double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
         double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
+        SmartDashboard.putNumber("translationjoystickinput", translationVal);
         // if (elevatorHeight >= 30000) {
         //     translationVal = translationVal * slowSpeed;
         //     strafeVal = strafeVal * slowSpeed;

@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 1.2208036846706325,
+      "y": 7.051099207636818
+    },
+    "rotation": 90.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -12,15 +18,45 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Score in Amp"
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Intake"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Test Path to Leave Starting Area 2.10"
+            "pathName": "hello"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Auto Zero"
           }
         }
       ]
