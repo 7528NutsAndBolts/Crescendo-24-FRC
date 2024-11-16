@@ -3,9 +3,9 @@ package frc.robot.commands.Intake;
 import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class IntakeObject extends Command {
+public class FullObject extends Command {
 
-    public IntakeObject() {
+    public FullObject() {
         addRequirements(RobotContainer.intake);
     }
 
@@ -14,12 +14,12 @@ public class IntakeObject extends Command {
     }
 
     public void execute() {
-        RobotContainer.intake.intake();
+    RobotContainer.intake.fullOut();
     }
 
     public boolean isFinished() {
         // end();
-        return false;
+        return true;
     }
 
     protected void end() {

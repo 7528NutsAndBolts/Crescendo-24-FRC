@@ -41,7 +41,7 @@ public class Swerve extends SubsystemBase {
     public SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
-    private SwerveDriveKinematics kinematics = Constants.Swerve.swerveKinematics;
+   // private SwerveDriveKinematics kinematics = Constants.Swerve.swerveKinematics;
 
     private Field2d field = new Field2d();
 
@@ -49,7 +49,7 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0); // changed this from 0 to 180 so BE CAREFUL OMGGGOMGOGMG
-        zeroGyro();
+        // zeroGyro();
 
         mSwerveMods = new SwerveModule[] {
                 new SwerveModule(0, Constants.Swerve.FrontLeft.constants),
@@ -71,11 +71,11 @@ public class Swerve extends SubsystemBase {
 
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
 
-         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
+        //  PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
 
         AutoBuilder.configureHolonomic( //TODO seems a bit weird, might wanna slash out the stuff if this dont work :(
       this::getPose, 
-      this::setPose, 
+      this::resetPose, 
       this::getSpeeds, 
       this::driveRobotRelative, 
       Constants.Swerve.pathFollowerConfig,
@@ -164,6 +164,10 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
+    public void resetPose(Pose2d pose) {
+        swerveOdometry.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
+    }
+
     public Rotation2d getHeading() {
         return getPose().getRotation();
     }
@@ -195,12 +199,12 @@ public class Swerve extends SubsystemBase {
         setModuleStates(targetStates);
       }
     
-    public void zeroGyro() {
-        gyro.setYaw(0);
-    }
+    // public void zeroGyro() {
+    //     gyro.setYaw(0);
+    // }
 
     // public void autozeroGyro() {
-    //     gyro.setYaw(180); //for autozero, robot is flipped but still field-oriented
+    //     gyro.setYaw(0); //for autozero, robot is flipped but still field-oriented
     // }
 
     // public Rotation2d getYaw() {
@@ -243,7 +247,7 @@ public class Swerve extends SubsystemBase {
     //     throw new UnsupportedOperationException("Unimplemented method 'followTrajectoryCommand'");
     // }
 
-  
+
 
 }
 
