@@ -123,7 +123,7 @@
 package frc.lib.math;
 
 public class Conversions {
-    
+    // public static final double wheelMPS = 6.0;
     /**
      * @param wheelRPS Wheel Velocity: (in Rotations per Second)
      * @param circumference Wheel Circumference: (in Meters)

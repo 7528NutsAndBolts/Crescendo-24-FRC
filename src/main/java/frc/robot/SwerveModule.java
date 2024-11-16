@@ -4,10 +4,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import frc.lib.math.Conversions;
-import frc.lib.util.CTREModuleState;
 import frc.lib.util.SwerveModuleConstants;
 
 
@@ -67,7 +64,7 @@ public class SwerveModule {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
-            driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
+            driveDutyCycle.Output = desiredState.speedMetersPerSecond; // Constants.Swerve.maxSpeed; test with this off and on
             mDriveMotor.setControl(driveDutyCycle);
             // double percentOutput = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
             // mDriveMotor.set(ControlMode.PercentOutput, percentOutput);

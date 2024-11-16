@@ -17,6 +17,9 @@ public class AutonomousSelector {
 
         autonomousModeChooser = new SendableChooser<>();
         autonomousModeChooser.addOption("Test Auto 2.10", AutonomousMode.Test_Auto);
+        autonomousModeChooser.addOption("No Auto", AutonomousMode.NoAuto);
+        autonomousModeChooser.addOption("Straight Out", AutonomousMode.Straight_Out);
+
         autoTab.add("Mode", autonomousModeChooser);
         
     }
@@ -27,6 +30,10 @@ public class AutonomousSelector {
         switch (mode) {
             case Test_Auto:
                 return new PathPlannerAuto("Test Auto 2.10");
+            case NoAuto:
+                return new NoAuto(s_Swerve);
+            case Straight_Out:
+                return new PathPlannerAuto("Straight Out");
             default:
                 return new PathPlannerAuto("Test Auto 2.10");
         }
@@ -38,6 +45,8 @@ public class AutonomousSelector {
 
     private enum AutonomousMode {
         Test_Auto,
+        NoAuto,
+        Straight_Out
 
     }
 

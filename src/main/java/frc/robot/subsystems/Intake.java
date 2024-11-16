@@ -1,79 +1,72 @@
- package frc.robot.subsystems;
+// package frc.robot.subsystems;
 
- import com.ctre.phoenix6.hardware.TalonFX;
- import com.ctre.phoenix6.signals.NeutralModeValue;
- import edu.wpi.first.wpilibj2.command.SubsystemBase;
+// import com.ctre.phoenix6.configs.TalonFXConfiguration;
+// import com.ctre.phoenix6.controls.Follower;
+// import com.ctre.phoenix6.hardware.TalonFX;
+// import com.ctre.phoenix6.signals.InvertedValue;
+// import com.ctre.phoenix6.signals.NeutralModeValue;
 
- import com.ctre.phoenix6.configs.TalonFXConfiguration;
+// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+// public class Intake extends SubsystemBase {
 
- public final class Intake extends SubsystemBase {
-     // values adjusted dont change w out intention
-     private final double intake_speed = 0.2;
-     private final double outtake_speed = 0.7; 
-     public TalonFXConfiguration intakeConfiguration = new TalonFXConfiguration();
+// 	public TalonFX IntakeFalcon = new TalonFX(10);
+//     public TalonFX IntakeFalcon2 = new TalonFX(11);
+//     public TalonFXConfiguration IntakeFXConfig = new TalonFXConfiguration();
 
-     private final TalonFX intakeMotor1 = new TalonFX(10);
-     private final TalonFX intakeMotor2 = new TalonFX(11);
+// 	public Intake() {
+//         /** Shooter Motor Configuration */
+//         /* Motor Inverts and Neutral Mode */
+//         this.IntakeFalcon2.setControl(new Follower(10, true));
+// 		IntakeFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+//         IntakeFXConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-     public Intake() {
+//         /* Current Limiting */
+//         IntakeFXConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+//         IntakeFXConfig.CurrentLimits.SupplyCurrentLimit = 20;
+//         IntakeFXConfig.CurrentLimits.SupplyCurrentThreshold = 40;
+//         IntakeFXConfig.CurrentLimits.SupplyTimeThreshold = 0.08;
 
-         /* Clear Sticky Faults */
-         intakeMotor1.clearStickyFaults();
-         intakeMotor2.clearStickyFaults();
+//         /* PID Config */
+//         IntakeFXConfig.Slot0.kP = 0.2;
+//         IntakeFXConfig.Slot0.kI = 0;
+//         IntakeFXConfig.Slot0.kD = 0;
 
-         /* Open Loop Ramping */
-         intakeConfiguration.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.25;
+//         /* Open and Closed Loop Ramping */
+//         IntakeFXConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.25;
+//         IntakeFXConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.25;
 
-         /* Peak Output */
-         intakeConfiguration.MotorOutput.PeakForwardDutyCycle = 1;
-         intakeConfiguration.MotorOutput.PeakReverseDutyCycle = -1;
+//         IntakeFXConfig.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = 0.25;
+//         IntakeFXConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = 0.25;
 
-         /* Neutral Mode */
-         intakeConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+//         // Config Motor
+//         IntakeFalcon.getConfigurator().apply(IntakeFXConfig);
+//         IntakeFalcon.getConfigurator().setPosition(0.0);
+//         IntakeFalcon2.getConfigurator().setPosition(0.0);
 
-         /* Current Limiting */
-         intakeConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
-         intakeConfiguration.CurrentLimits.SupplyCurrentLimit = 20;
-         intakeConfiguration.CurrentLimits.SupplyCurrentThreshold = 40;
-         intakeConfiguration.CurrentLimits.SupplyTimeThreshold = 0.08;
+// 	}
 
-        //  pheonix 6 version of setstatusframeperiod
-         intakeMotor1.getPosition().setUpdateFrequency(252);
+// 	public void setSpeed(double speed) {
+//         this.IntakeFalcon.set(speed);
+//         this.IntakeFalcon2.set(-speed);
+// 	}
 
-           /* Factory Defaults/Applies Config */
-         intakeMotor1.getConfigurator().apply(intakeConfiguration);
-         intakeMotor2.getConfigurator().apply(intakeConfiguration);
-     }
+// 	public double getCurrentDraw() {
+// 		return this.IntakeFalcon.getSupplyCurrent().getValueAsDouble();
+// 	}
 
-    //   intake methods
-    //  unclear whether intakle parameter units are percentage or degrees
-     public void intake() {  //m_1 is postive m_2 is negative, outake vis versa
-         intakeMotor1.set(intake_speed);
-         intakeMotor2.set(-intake_speed);
-     }
+// 	public void resetShooterEncoder() {
+//         try {
+// 			IntakeFalcon.getConfigurator().setPosition(0.0);
+//         }
+//         catch (Exception e) {
+//             DriverStation.reportError("Shooter.resetShooterEncoders exception.  You're Screwed! : " + e.toString(), false);
+//         }
+// 	}
 
-     public void outtake() {
-        // intakeMotor1.set(-outtake_speed);
-        intakeMotor2.set(outtake_speed);
-     }
-
-     public void hold() {
-        intakeMotor1.set(0);
-        intakeMotor2.set(0);
-
-     }
-
-     public void stopIntake() {
-        intakeMotor1.set(0);
-        intakeMotor2.set(0);
-
-     }
-     
- }
-    
-
-
-
-
-
+// 	public void updateDashboard() {
+// 		SmartDashboard.putNumber("Intake Current", this.getCurrentDraw());
+// 	}
+// }

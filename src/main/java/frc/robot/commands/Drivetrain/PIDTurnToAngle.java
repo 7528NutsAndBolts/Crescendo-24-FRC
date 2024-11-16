@@ -16,8 +16,8 @@ public class PIDTurnToAngle extends Command {
     private Swerve s_Swerve;    
     private DoubleSupplier translationSup;
     private DoubleSupplier strafeSup;
-    // private DoubleSupplier rotationSup;
-    // private Boolean robotCentricSup;
+    private DoubleSupplier rotationSup;
+    private Boolean robotCentricSup;
 
     public double rotationVal = 0;
 
@@ -25,7 +25,7 @@ public class PIDTurnToAngle extends Command {
     public double currentAngle = 0;
     public double acceptableError = 0;
 
-    private final PIDController angleController = new PIDController(0.012, 0, 0.0); //kd used to be 0
+    private final PIDController angleController = new PIDController(0.012, 0.0, 0.0); //kd used to be 0
 
     public PIDTurnToAngle(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, Boolean robotCentricSup, double targetAngle) {
         this.s_Swerve = s_Swerve;
@@ -33,8 +33,8 @@ public class PIDTurnToAngle extends Command {
 
         this.translationSup = translationSup;
         this.strafeSup = strafeSup;
-        // this.rotationSup = rotationSup;
-        // this.robotCentricSup = robotCentricSup;
+        this.rotationSup = rotationSup;
+        this.robotCentricSup = robotCentricSup;
         this.targetAngle = targetAngle;
         angleController.enableContinuousInput(0, 360);
     }
